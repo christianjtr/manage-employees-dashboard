@@ -1,5 +1,3 @@
-# Manage employees - Assestment
-
 ### Installation and running the project
 
 The project requires [Node.js](https://nodejs.org/) and [NPM](https://www.npmjs.com/) to run.
@@ -9,6 +7,12 @@ Clone the repository:
 ```shell
 git clone https://github.com/christianjtr/manage-employees-assestment.git
 ```
+
+### Demo
+
+Click on the following link (Github page project):
+
+https://christianjtr.github.io/manage-employees-assestment
 
 ### Project setup
 
