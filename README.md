@@ -1,3 +1,5 @@
+# Manage employees - Assestment
+
 ### Installation and running the project
 
 The project requires [Node.js](https://nodejs.org/) and [NPM](https://www.npmjs.com/) to run.
