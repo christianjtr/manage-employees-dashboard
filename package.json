@@ -1,0 +1,36 @@
+{
+  "name": "test",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "lint:fix": "vue-cli-service lint --fix"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "core-js": "^3.6.5",
+    "uuid": "^8.2.0",
+    "vue": "^2.6.11",
+    "vue-router": "^3.3.4",
+    "vuetify": "^2.3.6",
+    "vuex": "^3.5.1"
+  },
+  "devDependencies": {
+    "@mdi/font": "^5.3.45",
+    "@vue/cli-plugin-babel": "^4.4.6",
+    "@vue/cli-plugin-eslint": "^4.4.6",
+    "@vue/cli-service": "^4.4.6",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.5.0",
+    "eslint-plugin-vue": "^6.2.2",
+    "node-sass": "^4.14.1",
+    "sass": "^1.26.10",
+    "sass-loader": "^9.0.2",
+    "vue-cli-plugin-vuetify": "^2.0.7",
+    "vue-loader": "^15.9.3",
+    "vue-template-compiler": "^2.6.11",
+    "vuetify-loader": "^1.6.0"
+  }
+}
