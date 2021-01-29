@@ -1,6 +1,8 @@
 {
-  "name": "test",
-  "version": "0.0.1",
+  "name": "manage-employees-assestments",
+  "version": "1.0.0",
+  "description": "CRUD to manage employees",
+  "author": "Christian José Torrealba Rondón",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
