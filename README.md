@@ -12,6 +12,8 @@ git clone https://github.com/christianjtr/manage-employees-assestment.git
 
 ### Demo
 
+![](manage-employees.gif)
+
 Click on the following link (Github page project):
 
 https://christianjtr.github.io/manage-employees-assestment
