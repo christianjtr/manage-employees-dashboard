@@ -2,6 +2,8 @@
 
 It's just another test...
 
+Test that contains a dashboard panel to manage employees (client-side CRUD). VueJS v2, Vuetify
+
 ### Installation and running the project
 
 The project requires [Node.js](https://nodejs.org/) and [NPM](https://www.npmjs.com/) to run.
