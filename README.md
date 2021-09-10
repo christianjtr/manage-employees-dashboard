@@ -20,7 +20,7 @@ git clone https://github.com/christianjtr/manage-employees-assestment.git
 
 Click on the following link (Github page project):
 
-https://christianjtr.github.io/manage-employees-assestment
+https://christianjtr.github.io/manage-employees-dashboard
 
 ### Project setup
 
