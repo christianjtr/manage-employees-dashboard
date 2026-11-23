@@ -357,11 +357,12 @@ async function toggleFullscreen() {
   <v-container class="page-container organization-page" fluid>
     <div class="page-heading organization-heading">
       <div>
-        <p class="eyebrow">TEAM STRUCTURE</p>
         <h1>Organization</h1>
-        <p class="page-description">
-          See how people and teams connect across your organization.
-        </p>
+        <div class="page-title-meta">
+          <span>{{ employees.length }} {{ employees.length === 1 ? 'person' : 'people' }}</span>
+          <span class="page-title-separator" aria-hidden="true">·</span>
+          <span>{{ activeCount }} active</span>
+        </div>
       </div>
       <div class="organization-actions">
         <v-btn
@@ -380,19 +381,6 @@ async function toggleFullscreen() {
         </v-btn>
       </div>
     </div>
-
-    <section class="organization-summary" aria-label="Organization summary">
-      <div>
-        <strong>{{ employees.length }}</strong>
-        <span>{{ employees.length === 1 ? 'person' : 'people' }}</span>
-      </div>
-      <v-divider vertical />
-      <div>
-        <strong>{{ activeCount }}</strong>
-        <span>active</span>
-      </div>
-      <span class="summary-note">All records are stored in this browser</span>
-    </section>
 
     <div
       ref="chartShell"

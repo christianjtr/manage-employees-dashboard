@@ -48,4 +48,4 @@ npm run preview
 - `changelog.md` records implementation milestones and verification results.
 - `memory.md` records durable product and architecture decisions.
 
-The public demo is <https://christianjtr.github.io/manage-employees-dashboard>. After this branch is integrated, configure the repository's Pages publishing source to **GitHub Actions** to enable automatic deployment from `main`.
+The public demo is <https://christianjtr.github.io/manage-employees-dashboard>. GitHub Pages publishes from GitHub Actions, so pushes to `main` deploy automatically after validation.

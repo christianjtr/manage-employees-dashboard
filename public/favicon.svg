@@ -1,9 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
-  <rect width="48" height="48" rx="14" fill="#1565C0" />
-  <path d="M24 11v9m0 0H14m10 0h10M14 20v5m20-5v5M14 25h20M14 25v6m20-6v6" stroke="#fff" stroke-linecap="round" stroke-width="2.5" />
-  <circle cx="24" cy="10" r="3.5" fill="#fff" />
-  <circle cx="14" cy="20" r="3.5" fill="#fff" />
-  <circle cx="34" cy="20" r="3.5" fill="#fff" />
-  <circle cx="14" cy="34" r="3.5" fill="#fff" />
-  <circle cx="34" cy="34" r="3.5" fill="#fff" />
+  <rect width="48" height="48" rx="13" fill="#334155" />
+  <path
+    d="M24 17v7M14 31v-7h20v7"
+    stroke="#fff"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <circle cx="24" cy="12.5" r="4.5" fill="#fff" />
+  <circle cx="14" cy="34" r="4.5" fill="#fff" />
+  <circle cx="34" cy="34" r="4.5" fill="#fff" />
 </svg>

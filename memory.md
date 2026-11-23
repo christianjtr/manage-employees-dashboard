@@ -58,6 +58,12 @@ Durable product and architecture decisions for future development. The changelog
 - **Reason:** CSV should be portable for people data without exposing browser-generated record IDs or timestamps.
 - **Implication:** Normalize and validate every row, resolve the full manager graph, then preview and replace the organization all-or-nothing after confirmation. Provide a downloadable header template from the People data menu.
 
+### 2026-11-23 — Compact headers and single brand mark
+
+- **Decision:** Keep view headers compact with inline counts instead of separate summary strips, use 16px spacing between editor fields, and use one slate hierarchy mark for the sidebar, mobile app bar and favicon.
+- **Reason:** The previous headers and unused Vue logo wasted space and gave the app two unrelated icons.
+- **Implication:** Show only title-level context in headers; keep a "shown" count when filters are active. In the collapsed rail, hide labels, center the icons horizontally and preserve accessible names. Do not reintroduce a second logo asset.
+
 ## Deferred scope
 
 - Organizational cycles, manager reference integrity and duplicate-email rules are enforced by full-collection validation; a single employee Zod schema cannot enforce them alone.

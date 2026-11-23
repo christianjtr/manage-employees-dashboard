@@ -2,6 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { useDisplay } from 'vuetify'
 
+import brandMark from '@/assets/brand.svg'
 import ConfirmationDialog from '@/components/ConfirmationDialog.vue'
 import { useConfirmation } from '@/composables/useConfirmation'
 import { useEmployees } from '@/composables/useEmployees'
@@ -64,6 +65,7 @@ async function clearInvalidData() {
         aria-label="Toggle navigation"
         @click="drawer = !drawer"
       />
+      <img :src="brandMark" alt="" class="app-bar-brand-mark" />
       <v-toolbar-title class="font-weight-bold">
         TeamMap
       </v-toolbar-title>
@@ -80,9 +82,7 @@ async function clearInvalidData() {
     >
       <div class="sidebar-header" :class="{ 'sidebar-header-rail': desktopRail }">
         <div class="brand-lockup">
-          <div class="brand-mark" aria-hidden="true">
-            <v-icon icon="mdi-family-tree" size="22" />
-          </div>
+          <img :src="brandMark" alt="" class="brand-mark" />
           <span v-if="!desktopRail" class="brand-name">TeamMap</span>
         </div>
         <v-btn
@@ -107,12 +107,14 @@ async function clearInvalidData() {
           to="/"
           prepend-icon="mdi-family-tree"
           title="Organization"
+          aria-label="Organization"
           exact
         />
         <v-list-item
           to="/people"
           prepend-icon="mdi-account-multiple-outline"
           title="People"
+          aria-label="People"
         />
       </v-list>
 

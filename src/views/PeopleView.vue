@@ -362,11 +362,14 @@ function clearFilters() {
   <v-container class="page-container people-page" fluid>
     <div class="page-heading people-heading">
       <div>
-        <p class="eyebrow">DIRECTORY</p>
         <h1>People</h1>
-        <p class="page-description">
-          Manage the people who make up your organization.
-        </p>
+        <div class="page-title-meta">
+          <span>{{ employees.length }} {{ employees.length === 1 ? 'person' : 'people' }}</span>
+          <template v-if="filteredEmployees.length !== employees.length">
+            <span class="page-title-separator" aria-hidden="true">·</span>
+            <span>{{ filteredEmployees.length }} shown</span>
+          </template>
+        </div>
       </div>
       <div class="organization-actions">
         <v-btn

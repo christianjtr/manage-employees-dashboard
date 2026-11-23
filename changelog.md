@@ -66,3 +66,11 @@ Project evolution notes, including the scope of each milestone and its verificat
 - Added import preview with people/active/department counts, all-or-nothing confirmation, Vuetify error feedback and a downloadable CSV header template in People → Data.
 - Generated internal IDs and timestamps during import; blank status defaults to active. CSV import can also restore the organization when saved browser data is invalid.
 - **Verification:** `npm ci`, `npm run lint`, `npm run typecheck`, `npm test` (30 passing), `npm run build`, `npm audit` (0 vulnerabilities) and `git diff --check` pass. Browser smoke checks imported a CSV with a manager relationship, showed preview counts, prompted before replacement and replaced the 17-person sample with the 2 imported rows.
+
+## 2026-11-23 — Layout refinements and brand icon
+
+- Increased the person editor spacing to 16px between fields and 16px inside paired rows, including the stacked mobile layout, while keeping compact 40–42 px controls.
+- Replaced the tall page headers with compact titles and inline context: Organization shows total people and active count, while People shows the total and a "shown" count when filters are active. The separate organization summary strip was removed.
+- Rebuilt the sidebar header as one row: brand icon, name and collapse control when expanded; simplified icon and collapse control when railed. Rail navigation icons are horizontally centered and retain accessible labels.
+- Replaced the unrelated Vue logo with a single slate hierarchy mark used in the sidebar, mobile app bar and favicon.
+- **Verification:** `npm run lint`, `npm run typecheck`, `npm test` (30 passing), `npm run build`, `npm audit` (0 vulnerabilities) and `git diff --check` pass. Browser checks confirmed 16px editor gaps on desktop and mobile, a single-line sidebar header, centered rail icons, inline counts with active filters and no horizontal overflow at 390px width.
