@@ -1,65 +1,46 @@
-# Manage employees - Assestment
+# TeamMap
 
-It's just another test...
+TeamMap is evolving into a lightweight, local-first way to understand who is in an organization and how people connect. The organization chart will be the primary experience, with a people directory for managing individual records.
 
-Test that contains a dashboard panel to manage employees (client-side CRUD). VueJS v2, Vuetify
+The repository is being modernized in reviewable milestones. The current branch establishes the frontend toolchain and application shell; product functionality and automated GitHub Pages deployment are subsequent milestones.
 
-### Installation and running the project
+## Requirements
 
-The project requires [Node.js](https://nodejs.org/) and [NPM](https://www.npmjs.com/) to run.
+- Node.js 22.12 or newer (Node 24 is the recommended baseline; see `.nvmrc`).
+- npm.
 
-Clone the repository:
+## Getting started
 
-```shell
-git clone https://github.com/christianjtr/manage-employees-assestment.git
+```sh
+npm ci
+npm run dev
 ```
 
-### Demo
+## Checks
 
-![](manage-employees.gif)
-
-Click on the following link (Github page project):
-
-https://christianjtr.github.io/manage-employees-dashboard
-
-### Project setup
-
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-
-```
-npm run build
-```
-
-### Run your tests
-
-```
-npm run test
-```
-
-### Lints and fixes files
-
-```
+```sh
 npm run lint
+npm run typecheck
+npm test
+npm run build
+npm run preview
 ```
 
-### Customize configuration
+## Technology
 
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- Vue 3 and TypeScript
+- Vite
+- Vuetify 3 (light theme)
+- Vue Router 4
+- Zod 4 for runtime validation and inferred domain types
+- Vitest
 
-### Comments
+## Project notes
 
-It's a basic CRUD dashboard to manage employees. The API that provide the fake data is [randomuser.me](https://randomuser.me/).
+- The app is designed to run locally in the browser without a backend.
+- The initial visual shell keeps the existing blue accent and uses a light theme.
+- CSV import is planned for a later phase.
+- `changelog.md` records implementation milestones and verification results.
+- `memory.md` records durable product and architecture decisions.
 
-### Technologies
-
-Vue v2, Vuex, Vuetify.
+The public demo remains at <https://christianjtr.github.io/manage-employees-dashboard> and will be updated after the GitHub Pages workflow is introduced.
