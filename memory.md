@@ -76,6 +76,12 @@ Durable product and architecture decisions for future development. The changelog
 - **Reason:** It is a permissive, widely understood license that fits a small local-first demo and allows reuse with minimal friction.
 - **Implication:** Keep `LICENSE`, the `license` field in `package.json` and the README license link in sync. Contributors keep attribution and the warranty disclaimer intact.
 
+### 2026-11-23 — README language
+
+- **Decision:** Keep `README.md` in English.
+- **Reason:** The public repository README was originally in English; the user corrected a Spanish rewrite.
+- **Implication:** Write and maintain user-facing repository documentation in English unless the user explicitly asks for another language. Spanish remains fine for conversation.
+
 ## Deferred scope
 
 - Organizational cycles, manager reference integrity and duplicate-email rules are enforced by full-collection validation; a single employee Zod schema cannot enforce them alone.

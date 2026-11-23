@@ -1,58 +1,58 @@
 # TeamMap
 
-**Entiende la forma de tu organización en segundos.** TeamMap convierte las relaciones de mando en un organigrama interactivo y mantiene un directorio editable de personas. Todo funciona en el navegador, sin cuentas ni backend: tus datos se quedan en el equipo donde los cargas.
+**Understand the shape of your organization in seconds.** TeamMap turns reporting lines into an interactive org chart and keeps an editable people directory. Everything runs in the browser, with no accounts or backend: your data stays on the device where you load it.
 
-Explora quién reporta a quién, encuentra a una persona por nombre, rol o departamento, y mantén altas, bajas y managers al día. Puedes recorrerlo con los datos ficticios de ejemplo o importar los tuyos desde CSV o una copia JSON.
+Explore who reports to whom, find someone by name, role or department, and keep hires, leavers and managers up to date. Start with the fictional sample organization or import your own data from CSV or a JSON backup.
 
-> **La promesa real:** una herramienta local, rápida y comprensible para una organización pequeña. No es un HRIS multiusuario: no hay inicio de sesión, sincronización entre dispositivos ni servidor que guarde tu información.
+> **The real promise:** a local, fast and easy-to-understand tool for a small organization. This is not a multi-user HRIS: there is no sign-in, no cross-device sync and no server storing your information.
 
-## Vista previa
+## Preview
 
-Capturas tomadas desde la aplicación en desarrollo con la organización de ejemplo cargada.
+Screenshots captured from the running development app with the sample organization loaded.
 
-| Organigrama interactivo | Directorio de personas |
+| Interactive org chart | People directory |
 |:---:|:---:|
-| ![Organigrama interactivo](docs/screenshots/organization-desktop.png) | ![Directorio de personas](docs/screenshots/people-desktop.png) |
+| ![Interactive org chart](docs/screenshots/organization-desktop.png) | ![People directory](docs/screenshots/people-desktop.png) |
 
-| Organigrama en móvil | Directorio en móvil |
+| Org chart on mobile | Directory on mobile |
 |:---:|:---:|
-| ![Organigrama en móvil](docs/screenshots/organization-mobile.png) | ![Directorio en móvil](docs/screenshots/people-mobile.png) |
+| ![Org chart on mobile](docs/screenshots/organization-mobile.png) | ![Directory on mobile](docs/screenshots/people-mobile.png) |
 
-## Qué puedes hacer
+## What you can do
 
-- **Ver la estructura, no solo una lista.** El organigrama se genera desde las relaciones `managerId`. Puedes expandir o contraer ramas, buscar personas —con resaltado y contador de coincidencias—, hacer zoom, ajustar la vista a la pantalla y abrir el modo de pantalla completa.
-- **Trabajar una persona a la vez.** Al seleccionar una tarjeta se abre un panel contextual para consultar o editar sus datos, incluido su manager, puesto, departamento, estado y fecha de ingreso.
-- **Mantener el directorio al día.** Busca por nombre o correo, filtra por departamento, puesto y estado, y ordena y pagina los resultados. Las acciones destructivas piden confirmación; al eliminar a un manager, sus reportes directos pasan a su propio manager, o al nivel superior.
-- **Traer tus datos sin sorpresas.** Importa CSV con relaciones por correo de manager, o restaura una copia JSON versionada. Todo el archivo y el grafo de reportes se validan antes de mostrar una vista previa y reemplazar los datos. Solo se aplica el cambio si la validación completa pasa.
-- **Cambiar de dispositivo exportando.** No hay sincronización automática: exporta una copia JSON desde People → Data y restáurala donde la necesites.
-- **Usarlo en cualquier tamaño de pantalla.** En escritorio la navegación empieza como una barra compacta de iconos; en móvil se convierte en un cajón temporal y las tablas y el organigrama se adaptan al ancho disponible.
+- **See the structure, not just a list.** The org chart is generated from `managerId` relationships. Expand or collapse branches, search people with highlighting and a match count, zoom, fit the chart to the screen and open fullscreen mode.
+- **Work on one person at a time.** Selecting a card opens a contextual panel to review or edit their details, including manager, position, department, status and start date.
+- **Keep the directory current.** Search by name or email, filter by department, position and status, and sort and paginate results. Destructive actions ask for confirmation; deleting a manager promotes their direct reports to that manager's own manager, or to the top level.
+- **Bring your own data without surprises.** Import CSV with manager links resolved by email, or restore a versioned JSON backup. The whole file and reporting graph are validated before a preview is shown and before any data is replaced. Changes are applied only if full validation passes.
+- **Move between devices by exporting.** There is no automatic sync: export a JSON backup from People → Data and restore it wherever you need it.
+- **Use it at any screen size.** On desktop, navigation starts as a compact icon rail. On mobile it becomes a temporary drawer, and both the table and the org chart adapt to the available width.
 
-## Privacidad y datos
+## Privacy and data
 
-- La información se guarda en `localStorage` (`teammap.organization.v1`). No se envía a ningún servicio.
-- Los datos inválidos o de una versión no soportada no se sobrescriben automáticamente: la app lo informa y te pide confirmación antes de borrarlos o restaurar una copia válida.
-- El botón **Load sample** reemplaza la organización actual solo después de pedir confirmación.
-- La copia JSON es el mecanismo explícito para mover o respaldar tu información.
+- Data is stored in `localStorage` (`teammap.organization.v1`). It is not sent to any service.
+- Invalid data or unsupported versions are not overwritten automatically: the app tells you and asks for confirmation before clearing them or restoring a valid backup.
+- The **Load sample** button replaces the current organization only after confirmation.
+- The JSON backup is the explicit mechanism for moving or backing up your information.
 
 ## Demo
 
-La versión publicada está en <https://christianjtr.github.io/manage-employees-dashboard>. GitHub Pages publica automáticamente desde GitHub Actions después de validar cada push a `main`.
+The published version is at <https://christianjtr.github.io/manage-employees-dashboard>. GitHub Pages publishes automatically from GitHub Actions after each validated push to `main`.
 
-## Desarrollo
+## Development
 
-### Requisitos
+### Requirements
 
-- Node.js 22.12 o superior (se recomienda Node 24; consulta `.nvmrc`).
+- Node.js 22.12 or newer (Node 24 is recommended; see `.nvmrc`).
 - npm.
 
-### Arranque
+### Getting started
 
 ```sh
 npm ci
 npm run dev
 ```
 
-### Verificaciones
+### Checks
 
 ```sh
 npm run lint
@@ -64,18 +64,18 @@ npm run preview
 
 ### Stack
 
-- Vue 3 y TypeScript
+- Vue 3 and TypeScript
 - Vite
-- Vuetify 4 con tema claro
-- Vue Router 4 con rutas hash para GitHub Pages
-- Zod 4 para validación en tiempo de ejecución y tipos derivados
+- Vuetify 4 with a light theme
+- Vue Router 4 with hash routes for GitHub Pages
+- Zod 4 for runtime validation and inferred domain types
 - Vitest
 
-## Documentación del proyecto
+## Project documentation
 
-- `changelog.md` registra los hitos de implementación y sus verificaciones.
-- `memory.md` recoge las decisiones duraderas de producto y arquitectura.
+- `changelog.md` records implementation milestones and verification results.
+- `memory.md` records durable product and architecture decisions.
 
-## Licencia
+## License
 
-Distribuido bajo la [licencia MIT](LICENSE). Puedes usar, modificar y redistribuir el proyecto conservando el aviso de copyright y la renuncia de garantía incluidos.
+Distributed under the [MIT License](LICENSE). You can use, modify and redistribute the project as long as you keep the included copyright notice and warranty disclaimer.

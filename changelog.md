@@ -101,3 +101,9 @@ Project evolution notes, including the scope of each milestone and its verificat
 - Added a standard MIT `LICENSE` file with the project owner as copyright holder.
 - Declared `"license": "MIT"` in `package.json` and linked the license from the README.
 - **Verification:** `npm run lint`, `npm run typecheck`, `npm test` (30 passing), `npm run build`, `npm audit` (0 vulnerabilities) and `git diff --check` pass.
+
+## 2026-11-23 — README language restored to English
+
+- Restored `README.md` to English while keeping the product-first structure, embedded screenshots and MIT license link.
+- Kept the same honest scope statement: local-first, single-browser tool rather than a multi-user HRIS.
+- **Verification:** `npm run lint`, `npm run typecheck`, `npm test` (30 passing), `npm run build`, `npm audit` (0 vulnerabilities) and `git diff --check` pass.
