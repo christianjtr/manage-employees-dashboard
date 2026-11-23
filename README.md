@@ -20,7 +20,8 @@ Screenshots captured from the running development app with the sample organizati
 
 ## What you can do
 
-- **See the structure, not just a list.** The org chart is generated from `managerId` relationships. Expand or collapse branches, search people with highlighting and a match count, zoom, fit the chart to the screen and open fullscreen mode.
+- **See the structure, not just a list.** The org chart is generated from `managerId` relationships. Expand or collapse branches, search people with highlighting and a match count, zoom, fit the chart to the screen and open fullscreen mode. Fullscreen is a browsing mode: exit it to review or edit a selected person.
+- **Understand the shape at a glance.** Insights summarizes people, departments, top-level roles and hierarchy depth from the same local organization data, with read-only counts and no external service.
 - **Work on one person at a time.** Selecting a card opens a contextual panel to review or edit their details, including manager, position, department, status and start date.
 - **Keep the directory current.** Search by name or email, filter by department, position and status, and sort and paginate results. Destructive actions ask for confirmation; deleting a manager promotes their direct reports to that manager's own manager, or to the top level.
 - **Bring your own data without surprises.** Import CSV with manager links resolved by email, or restore a versioned JSON backup. The whole file and reporting graph are validated before a preview is shown and before any data is replaced. Changes are applied only if full validation passes.

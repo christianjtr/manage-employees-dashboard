@@ -107,3 +107,11 @@ Project evolution notes, including the scope of each milestone and its verificat
 - Restored `README.md` to English while keeping the product-first structure, embedded screenshots and MIT license link.
 - Kept the same honest scope statement: local-first, single-browser tool rather than a multi-user HRIS.
 - **Verification:** `npm run lint`, `npm run typecheck`, `npm test` (30 passing), `npm run build`, `npm audit` (0 vulnerabilities) and `git diff --check` pass.
+
+## 2026-11-23 — Organization Insights and navigation polish
+
+- Added an **Insights** page with local-only metrics: people by status, departments, top-level people, hierarchy depth, people per department and direct reports per manager.
+- Added a third navigation entry and a read-only empty state consistent with the existing brand mark.
+- Added a fullscreen browsing notice to the organization chart and kept the existing behavior where a selected person's panel appears after leaving fullscreen.
+- Replaced generic empty-state icons with the current TeamMap brand mark and removed the unused legacy `src/assets/logo.png`.
+- **Verification:** `npm run lint`, `npm run typecheck`, `npm test` (34 passing), `npm run build`, `npm audit` (0 vulnerabilities) and `git diff --check` pass.

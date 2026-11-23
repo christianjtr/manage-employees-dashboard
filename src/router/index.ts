@@ -14,6 +14,11 @@ const router = createRouter({
       component: () => import('@/views/PeopleView.vue'),
     },
     {
+      path: '/insights',
+      name: 'insights',
+      component: () => import('@/views/OrganizationInsightsView.vue'),
+    },
+    {
       path: '/:pathMatch(.*)*',
       redirect: '/',
     },

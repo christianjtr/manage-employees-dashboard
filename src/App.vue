@@ -116,6 +116,12 @@ async function clearInvalidData() {
           title="People"
           aria-label="People"
         />
+        <v-list-item
+          to="/insights"
+          prepend-icon="mdi-chart-box-outline"
+          title="Insights"
+          aria-label="Insights"
+        />
       </v-list>
 
       <template #append>

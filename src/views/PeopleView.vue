@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import { useDisplay } from 'vuetify'
 
+import brandMark from '@/assets/brand.svg'
 import ConfirmationDialog from '@/components/ConfirmationDialog.vue'
 import EmployeeDetailsPanel from '@/components/people/EmployeeDetailsPanel.vue'
 import EmployeeEditorPanel from '@/components/people/EmployeeEditorPanel.vue'
@@ -491,8 +492,8 @@ function clearFilters() {
       </div>
 
       <div v-if="employees.length === 0" class="directory-empty-state">
-        <div class="empty-canvas-icon">
-          <v-icon icon="mdi-account-multiple-outline" size="30" />
+        <div class="empty-state-brand">
+          <img :src="brandMark" alt="" />
         </div>
         <h2>Your directory is taking shape</h2>
         <p>Add someone or load the fictional sample organization to get started.</p>

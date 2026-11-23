@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
+import brandMark from '@/assets/brand.svg'
 import ConfirmationDialog from '@/components/ConfirmationDialog.vue'
 import EmployeeDetailsPanel from '@/components/people/EmployeeDetailsPanel.vue'
 import EmployeeEditorPanel from '@/components/people/EmployeeEditorPanel.vue'
@@ -133,6 +134,11 @@ watch(roots, async () => {
   await nextTick()
   window.requestAnimationFrame(fitChart)
 }, { flush: 'post' })
+
+watch(isFullscreen, async () => {
+  await nextTick()
+  window.requestAnimationFrame(fitChart)
+})
 
 function handleFullscreenChange() {
   if (document.fullscreenElement === chartShell.value) {
@@ -387,6 +393,14 @@ async function toggleFullscreen() {
       class="chart-fullscreen-shell"
       :class="{ 'chart-fullscreen-fallback': usingFullscreenFallback }"
     >
+      <v-alert
+        v-if="isFullscreen"
+        class="fullscreen-note"
+        density="compact"
+        text="Fullscreen is for browsing the organization. Exit fullscreen to view or edit people."
+        type="info"
+        variant="tonal"
+      />
       <v-card class="chart-shell" rounded="lg" variant="flat">
         <div class="chart-toolbar">
           <v-text-field
@@ -481,8 +495,8 @@ async function toggleFullscreen() {
         </div>
 
         <div v-if="employees.length === 0" class="chart-empty-state">
-          <div class="empty-canvas-icon">
-            <v-icon icon="mdi-family-tree" size="30" />
+          <div class="empty-state-brand">
+            <img :src="brandMark" alt="" />
           </div>
           <h2>Your organization map starts here</h2>
           <p>

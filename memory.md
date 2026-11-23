@@ -82,6 +82,12 @@ Durable product and architecture decisions for future development. The changelog
 - **Reason:** The public repository README was originally in English; the user corrected a Spanish rewrite.
 - **Implication:** Write and maintain user-facing repository documentation in English unless the user explicitly asks for another language. Spanish remains fine for conversation.
 
+### 2026-11-23 — Organization Insights
+
+- **Decision:** Add a read-only Insights page derived from the existing employee collection instead of introducing external data integrations.
+- **Reason:** The user asked for a realistic, useful improvement for a small local-first tool. Structure metrics are available locally and do not need a backend, schema migration or new data source.
+- **Implication:** Keep insight calculations as pure domain functions over `Employee[]` and preserve the existing validation and storage format. Include active and inactive people in structure counts, show status separately and avoid health scores or inferred reporting relationships. Fullscreen remains a browsing mode: show a notice and keep person-panel access after exiting. Use the current `brand.svg` in empty states and do not reintroduce legacy logo assets.
+
 ## Deferred scope
 
 - Organizational cycles, manager reference integrity and duplicate-email rules are enforced by full-collection validation; a single employee Zod schema cannot enforce them alone.
