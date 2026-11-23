@@ -30,7 +30,7 @@ npm run preview
 
 - Vue 3 and TypeScript
 - Vite
-- Vuetify 3 (light theme)
+- Vuetify 4 (light theme)
 - Vue Router 4
 - Zod 4 for runtime validation and inferred domain types
 - Vitest

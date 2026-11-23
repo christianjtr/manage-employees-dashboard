@@ -135,6 +135,7 @@ body {
 
 .app-main {
   display: flex;
+  flex-direction: column;
   min-height: 0;
   overflow-x: hidden;
   overflow-y: auto;
@@ -754,6 +755,7 @@ body {
 }
 
 .storage-recovery-alert {
+  flex: 0 0 auto;
   margin: 20px 28px 0;
 }
 

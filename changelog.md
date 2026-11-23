@@ -74,3 +74,11 @@ Project evolution notes, including the scope of each milestone and its verificat
 - Rebuilt the sidebar header as one row: brand icon, name and collapse control when expanded; simplified icon and collapse control when railed. Rail navigation icons are horizontally centered and retain accessible labels.
 - Replaced the unrelated Vue logo with a single slate hierarchy mark used in the sidebar, mobile app bar and favicon.
 - **Verification:** `npm run lint`, `npm run typecheck`, `npm test` (30 passing), `npm run build`, `npm audit` (0 vulnerabilities) and `git diff --check` pass. Browser checks confirmed 16px editor gaps on desktop and mobile, a single-line sidebar header, centered rail icons, inline counts with active filters and no horizontal overflow at 390px width.
+
+## 2026-11-23 — Vuetify 4 migration
+
+- Upgraded Vuetify to 4.3.4 while keeping `vite-plugin-vuetify` 2.1.3, Vue 3.5, Vite 8 and Zod 4.
+- Restored the v3 visual baseline in `src/plugins/vuetify.ts`: light default theme, v3 display thresholds (md 960, lg 1280, xl 1920, xxl 2560) and uppercase button labels.
+- Fixed the invalid-storage recovery alert regression caused by Vuetify 4's grid-based alert layout: `.app-main` is now a flex column and the alert no longer shrinks into a narrow vertical strip.
+- Updated README and project memory to reflect Vuetify 4 and record the compatibility constraints.
+- **Verification:** `npm run lint`, `npm run typecheck`, `npm test` (30 passing), `npm run build`, `npm audit` (0 vulnerabilities) and `git diff --check` pass. Browser checks covered desktop rail/header layout, People table/filters, import dialog, confirmations, snackbars, invalid-storage recovery, Organization chart and 390px mobile layout; no console errors or horizontal overflow were found.

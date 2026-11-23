@@ -6,7 +6,7 @@ Durable product and architecture decisions for future development. The changelog
 
 ### 2026-11-23 — Modern frontend baseline
 
-- **Decision:** Use Vue 3, TypeScript, Vite, Vue Router 4, Vuetify 3 and Zod 4. Use composables rather than introducing a global state library until the product needs one.
+- **Decision:** Use Vue 3, TypeScript, Vite, Vue Router 4, Vuetify 4 and Zod 4. Use composables rather than introducing a global state library until the product needs one.
 - **Reason:** The Vue 2 / Vue CLI / Vuex stack is obsolete for the intended TeamMap product, while the app remains a small client-side tool.
 - **Implication:** Keep schemas as the source of inferred TypeScript types. Validate untrusted local/imported data at runtime; keep cross-record hierarchy invariants in domain logic rather than in the per-person schema.
 
@@ -63,6 +63,12 @@ Durable product and architecture decisions for future development. The changelog
 - **Decision:** Keep view headers compact with inline counts instead of separate summary strips, use 16px spacing between editor fields, and use one slate hierarchy mark for the sidebar, mobile app bar and favicon.
 - **Reason:** The previous headers and unused Vue logo wasted space and gave the app two unrelated icons.
 - **Implication:** Show only title-level context in headers; keep a "shown" count when filters are active. In the collapsed rail, hide labels, center the icons horizontally and preserve accessible names. Do not reintroduce a second logo asset.
+
+### 2026-11-23 — Vuetify 4 compatibility baseline
+
+- **Decision:** Run Vuetify 4 with explicit light theme, v3 display thresholds, uppercase button defaults and a column-oriented `v-main` layout.
+- **Reason:** Vuetify 4 changes the default theme to system, reduces breakpoints, removes uppercase buttons, converts alerts to grid layout, and changes typography/reset/CSS layering. The existing UI depends on the v3 visual baseline.
+- **Implication:** Keep `theme.defaultTheme: 'light'`, `display.thresholds` (md 960, lg 1280, xl 1920, xxl 2560) and `defaults.VBtn.class: 'text-uppercase'` in `src/plugins/vuetify.ts`. Keep `.app-main` as a flex column so the storage-recovery alert stacks above views instead of shrinking into a narrow grid item. Re-check dialogs, snackbars, tables and mobile overflow after future Vuetify upgrades.
 
 ## Deferred scope
 
