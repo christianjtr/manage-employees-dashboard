@@ -123,57 +123,73 @@ function updateOpen(open: boolean) {
         <div class="form-name-row">
           <v-text-field
             v-model="values.firstName"
+            density="compact"
             label="First name"
             autocomplete="given-name"
             autofocus
+            hide-details="auto"
             :error-messages="fieldError('firstName')"
           />
           <v-text-field
             v-model="values.lastName"
+            density="compact"
             label="Last name"
             autocomplete="family-name"
+            hide-details="auto"
             :error-messages="fieldError('lastName')"
           />
         </div>
         <v-text-field
           v-model="values.email"
+          density="compact"
           label="Work email"
           type="email"
           autocomplete="email"
+          hide-details="auto"
           :error-messages="fieldError('email')"
         />
         <v-text-field
           v-model="values.position"
+          density="compact"
           label="Position"
+          hide-details="auto"
           :error-messages="fieldError('position')"
         />
         <v-text-field
           v-model="values.department"
+          density="compact"
           label="Department"
+          hide-details="auto"
           :error-messages="fieldError('department')"
         />
         <v-select
           v-model="values.managerId"
+          density="compact"
           label="Direct manager"
           :items="managerItems"
           item-title="title"
           item-value="value"
           clearable
+          hide-details="auto"
           :error-messages="fieldError('managerId')"
         />
         <div class="form-name-row">
           <v-select
             v-model="values.status"
+            density="compact"
             label="Status"
             :items="[
               { title: 'Active', value: 'active' },
               { title: 'Inactive', value: 'inactive' },
             ]"
+            hide-details="auto"
           />
           <v-text-field
             v-model="values.joinedAt"
+            density="compact"
             label="Joining date"
             type="date"
+            hide-details="auto"
             :error-messages="fieldError('joinedAt')"
           />
         </div>

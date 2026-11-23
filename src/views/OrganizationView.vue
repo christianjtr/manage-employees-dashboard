@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
 
+import ConfirmationDialog from '@/components/ConfirmationDialog.vue'
 import EmployeeDetailsPanel from '@/components/people/EmployeeDetailsPanel.vue'
 import EmployeeEditorPanel from '@/components/people/EmployeeEditorPanel.vue'
 import OrgChartNode from '@/components/organization/OrgChartNode.vue'
 import type { Employee, EmployeeInput } from '@/domain/employee'
 import { buildOrganizationTree, getFullName } from '@/domain/organization'
 import { sampleOrganization } from '@/data/sample-organization'
+import { useConfirmation } from '@/composables/useConfirmation'
 import { useEmployees } from '@/composables/useEmployees'
 
 const {
@@ -28,6 +30,12 @@ const chartViewport = ref<HTMLElement | null>(null)
 const zoom = ref(0.9)
 const notification = ref('')
 const notificationOpen = ref(false)
+const {
+  confirmation,
+  requestConfirmation,
+  resolveConfirmation,
+  updateConfirmationOpen,
+} = useConfirmation()
 
 const roots = computed(() => buildOrganizationTree(employees.value))
 const selectedEmployee = computed(
@@ -177,7 +185,7 @@ function savePerson(input: EmployeeInput) {
   notify(editingId.value ? 'Person updated.' : 'Person added.')
 }
 
-function removePerson(employee: Employee) {
+async function removePerson(employee: Employee) {
   const reports = employees.value.filter((person) => person.managerId === employee.id)
   const reportNote =
     reports.length > 0
@@ -188,7 +196,14 @@ function removePerson(employee: Employee) {
         }.`
       : ''
 
-  if (!window.confirm(`Delete ${getFullName(employee)}?${reportNote}`)) {
+  const confirmed = await requestConfirmation({
+    title: `Delete ${getFullName(employee)}?`,
+    message: `This person will be removed.${reportNote}`,
+    confirmLabel: 'Delete person',
+    confirmColor: 'error',
+  })
+
+  if (!confirmed) {
     return
   }
 
@@ -203,10 +218,15 @@ function removePerson(employee: Employee) {
   notify('Person deleted.')
 }
 
-function loadSample() {
+async function loadSample() {
   if (
     employees.value.length > 0 &&
-    !window.confirm('Replace the current organization with fictional sample data?')
+    !(await requestConfirmation({
+      title: 'Replace the current organization?',
+      message: 'The current people will be replaced with fictional sample data.',
+      confirmLabel: 'Load sample',
+      confirmColor: 'error',
+    }))
   ) {
     return
   }
@@ -394,5 +414,14 @@ function resetZoom() {
     <v-snackbar v-model="notificationOpen" timeout="3000">
       {{ notification }}
     </v-snackbar>
+    <ConfirmationDialog
+      :model-value="confirmation.open"
+      :title="confirmation.title"
+      :message="confirmation.message"
+      :confirm-label="confirmation.confirmLabel"
+      :confirm-color="confirmation.confirmColor"
+      @update:model-value="updateConfirmationOpen"
+      @confirm="resolveConfirmation(true)"
+    />
   </v-container>
 </template>

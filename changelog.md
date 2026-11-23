@@ -41,3 +41,12 @@ Project evolution notes, including the scope of each milestone and its verificat
 - Zod validates the envelope and employees; full-collection validation rejects unsupported versions, duplicate data, missing managers and reporting cycles as an all-or-nothing import.
 - A valid explicit restore can recover from invalid local data; malformed/invalid files leave the existing data untouched.
 - **Verification:** `npm ci`, lint, typecheck, `npm test` (20 passing), production build, `npm audit` (0 vulnerabilities) and `git diff --check` pass. Browser checks covered export, valid restore/replacement, rejection of a backup with a missing manager without changing existing records, and restore from a corrupt local-storage state.
+
+## 2026-11-23 — Navigation and chart layout refinements
+
+- Replaced browser-native confirmation prompts with a reusable Vuetify confirmation dialog for deleting people, loading sample data, restoring backups and clearing invalid local data.
+- Changed primary action buttons to slate (`#334155`) while retaining blue chart and profile accents.
+- Made the desktop navigation drawer start collapsed as an icon rail, with a state-aware expand/collapse icon and accessible labels; mobile navigation remains temporary.
+- Reduced the height of all people-editor inputs with compact density and automatic detail display; prevented flex layout from stretching fields vertically.
+- Made the organization chart fill the remaining viewport height and scroll within the chart area.
+- **Verification:** `npm ci`, `npm run lint`, `npm run typecheck`, `npm test` (22 passing), `npm run build`, `npm audit` (0 vulnerabilities) and `git diff --check` pass. Browser checks confirmed Vuetify confirmations, desktop rail toggling and icon changes, compact 40–42 px editor fields, chart viewport sizing/internal scrolling, and preserved directory scrolling.

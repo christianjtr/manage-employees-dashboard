@@ -26,6 +26,32 @@ body {
   letter-spacing: -0.03em;
 }
 
+.brand-lockup-rail {
+  gap: 4px;
+  justify-content: center;
+  padding: 0 8px;
+}
+
+.brand-lockup-rail .brand-mark {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+}
+
+.sidebar-toggle {
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+}
+
+.brand-lockup-rail .sidebar-toggle {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  flex-basis: 32px;
+}
+
 .brand-mark,
 .empty-canvas-icon {
   display: grid;
@@ -55,12 +81,24 @@ body {
 }
 
 .app-main {
+  display: flex;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
   background: #f6f7f9;
 }
 
 .page-container {
   max-width: 1440px;
   padding: 40px 48px;
+}
+
+.organization-page {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
 }
 
 .page-heading {
@@ -175,6 +213,13 @@ body {
   background: #fff;
 }
 
+.chart-shell.v-card {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+
 .chart-toolbar {
   display: flex;
   min-height: 72px;
@@ -182,6 +227,7 @@ body {
   gap: 4px;
   padding: 12px 18px;
   border-bottom: 1px solid #eceef1;
+  flex: 0 0 auto;
 }
 
 .chart-search {
@@ -202,8 +248,8 @@ body {
 }
 
 .chart-viewport {
-  min-height: 520px;
-  max-height: calc(100vh - 350px);
+  min-height: 0;
+  flex: 1 1 0;
   overflow: auto;
   overscroll-behavior: contain;
   background-color: #fff;
@@ -215,7 +261,7 @@ body {
 .chart-content {
   width: max-content;
   min-width: 100%;
-  min-height: 520px;
+  min-height: 100%;
   padding: 48px;
   transform: scale(var(--chart-zoom, 0.9));
   transform-origin: top left;
@@ -430,6 +476,11 @@ body {
   text-align: center;
 }
 
+.chart-empty-state {
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
 .chart-empty-state h2,
 .directory-empty-state h2 {
   margin: 0;
@@ -491,10 +542,18 @@ body {
   padding: 24px 22px;
 }
 
+.editor-fields > .v-input {
+  flex: 0 0 auto;
+}
+
 .form-name-row {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
+}
+
+.form-name-row .v-input {
+  min-width: 0;
 }
 
 .drawer-actions {
@@ -504,6 +563,10 @@ body {
   padding: 16px 22px;
   border-top: 1px solid #eceef1;
   background: #fff;
+}
+
+.confirmation-dialog-actions {
+  padding: 12px 20px 20px;
 }
 
 .person-profile {
@@ -869,12 +932,11 @@ body {
   }
 
   .chart-viewport {
-    min-height: 440px;
-    max-height: calc(100vh - 340px);
+    min-height: 0;
   }
 
   .chart-content {
-    min-height: 390px;
+    min-height: 100%;
     padding: 28px 22px;
   }
 

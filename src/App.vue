@@ -1,14 +1,24 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useDisplay } from 'vuetify'
 
+import ConfirmationDialog from '@/components/ConfirmationDialog.vue'
 import { useEmployees } from '@/composables/useEmployees'
+import { useConfirmation } from '@/composables/useConfirmation'
 
 const { mobile } = useDisplay()
 const drawer = ref(!mobile.value)
+const sidebarCollapsed = ref(true)
+const desktopRail = computed(() => !mobile.value && sidebarCollapsed.value)
 const storageMessage = ref('')
 const storageSnackbarOpen = ref(false)
 const { storageIssue, requiresRecovery, recoverSavedData } = useEmployees()
+const {
+  confirmation,
+  requestConfirmation,
+  resolveConfirmation,
+  updateConfirmationOpen,
+} = useConfirmation()
 
 watch(mobile, (isMobile) => {
   drawer.value = !isMobile
@@ -21,8 +31,15 @@ watch(storageIssue, (message) => {
   }
 }, { immediate: true })
 
-function clearInvalidData() {
-  if (!window.confirm('Clear the unreadable saved organization data?')) {
+async function clearInvalidData() {
+  const confirmed = await requestConfirmation({
+    title: 'Clear unreadable saved data?',
+    message: 'The unreadable organization data in this browser will be removed.',
+    confirmLabel: 'Clear invalid data',
+    confirmColor: 'error',
+  })
+
+  if (!confirmed) {
     return
   }
 
@@ -56,10 +73,12 @@ function clearInvalidData() {
       v-model="drawer"
       :permanent="!mobile"
       :temporary="mobile"
+      :rail="desktopRail"
+      :rail-width="84"
       color="surface"
       width="256"
     >
-      <div class="brand-lockup">
+      <div class="brand-lockup" :class="{ 'brand-lockup-rail': desktopRail }">
         <div
           class="brand-mark"
           aria-hidden="true"
@@ -69,7 +88,24 @@ function clearInvalidData() {
             size="22"
           />
         </div>
-        <span>TeamMap</span>
+        <span v-if="!desktopRail">TeamMap</span>
+        <v-spacer v-if="!desktopRail" />
+        <v-tooltip
+          v-if="!mobile"
+          :text="desktopRail ? 'Expand sidebar' : 'Collapse sidebar'"
+          location="right"
+        >
+          <template #activator="{ props }">
+            <v-btn
+              v-bind="props"
+              class="sidebar-toggle"
+              :aria-label="desktopRail ? 'Expand sidebar' : 'Collapse sidebar'"
+              :icon="desktopRail ? 'mdi-chevron-double-right' : 'mdi-chevron-double-left'"
+              variant="text"
+              @click="sidebarCollapsed = !sidebarCollapsed"
+            />
+          </template>
+        </v-tooltip>
       </div>
 
       <v-divider />
@@ -93,7 +129,7 @@ function clearInvalidData() {
       </v-list>
 
       <template #append>
-        <div class="local-first-note">
+        <div v-if="!desktopRail" class="local-first-note">
           <v-icon
             icon="mdi-laptop"
             size="18"
@@ -128,5 +164,14 @@ function clearInvalidData() {
     <v-snackbar v-model="storageSnackbarOpen" timeout="4500">
       {{ storageMessage }}
     </v-snackbar>
+    <ConfirmationDialog
+      :model-value="confirmation.open"
+      :title="confirmation.title"
+      :message="confirmation.message"
+      :confirm-label="confirmation.confirmLabel"
+      :confirm-color="confirmation.confirmColor"
+      @update:model-value="updateConfirmationOpen"
+      @confirm="resolveConfirmation(true)"
+    />
   </v-app>
 </template>

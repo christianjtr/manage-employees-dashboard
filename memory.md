@@ -24,9 +24,9 @@ Durable product and architecture decisions for future development. The changelog
 
 ### 2026-11-23 — Visual baseline
 
-- **Decision:** Start with a light-only theme, keep the current blue as the primary accent, and use neutral surfaces. Organization is the primary route; People is secondary.
-- **Reason:** The organization chart is the product's core experience, while existing blue styling is the current recognizable accent.
-- **Implication:** Use the sidebar for main navigation and contextual panels for person-level actions. Do not introduce a dark-theme toggle in the initial scope.
+- **Decision:** Use a light-only theme with slate (`#334155`) for primary actions and retain blue for selected chart nodes and supporting accents. Organization is the primary route; People is secondary.
+- **Reason:** Slate gives primary buttons a restrained neutral treatment while blue continues to distinguish chart selection and employee accents.
+- **Implication:** The desktop sidebar starts collapsed as an icon rail and can be toggled open; mobile navigation remains temporary. Use Vuetify dialogs for confirmations and contextual panels for person-level actions. Do not introduce a dark-theme toggle in the initial scope.
 
 ### 2026-11-23 — Validation and runtime compatibility
 

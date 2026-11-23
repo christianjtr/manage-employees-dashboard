@@ -2,8 +2,10 @@
 import { computed, ref } from 'vue'
 import { useDisplay } from 'vuetify'
 
+import ConfirmationDialog from '@/components/ConfirmationDialog.vue'
 import EmployeeDetailsPanel from '@/components/people/EmployeeDetailsPanel.vue'
 import EmployeeEditorPanel from '@/components/people/EmployeeEditorPanel.vue'
+import { useConfirmation } from '@/composables/useConfirmation'
 import type { Employee, EmployeeInput } from '@/domain/employee'
 import { getFullName } from '@/domain/organization'
 import { useEmployees } from '@/composables/useEmployees'
@@ -39,6 +41,12 @@ const importFilename = ref('')
 const importError = ref('')
 const importBusy = ref(false)
 const importPreview = ref<OrganizationBackup | null>(null)
+const {
+  confirmation,
+  requestConfirmation,
+  resolveConfirmation,
+  updateConfirmationOpen,
+} = useConfirmation()
 
 const selectedEmployee = computed(
   () => employees.value.find((employee) => employee.id === selectedId.value) ?? null,
@@ -165,7 +173,7 @@ function savePerson(input: EmployeeInput) {
   notify(editingId.value ? 'Person updated.' : 'Person added.')
 }
 
-function removePerson(employee: Employee) {
+async function removePerson(employee: Employee) {
   const reports = employees.value.filter((person) => person.managerId === employee.id)
   const reportNote =
     reports.length > 0
@@ -176,7 +184,14 @@ function removePerson(employee: Employee) {
         }.`
       : ''
 
-  if (!window.confirm(`Delete ${getFullName(employee)}?${reportNote}`)) {
+  const confirmed = await requestConfirmation({
+    title: `Delete ${getFullName(employee)}?`,
+    message: `This person will be removed.${reportNote}`,
+    confirmLabel: 'Delete person',
+    confirmColor: 'error',
+  })
+
+  if (!confirmed) {
     return
   }
 
@@ -191,10 +206,15 @@ function removePerson(employee: Employee) {
   notify('Person deleted.')
 }
 
-function loadSample() {
+async function loadSample() {
   if (
     employees.value.length > 0 &&
-    !window.confirm('Replace the current organization with fictional sample data?')
+    !(await requestConfirmation({
+      title: 'Replace the current organization?',
+      message: 'The current people will be replaced with fictional sample data.',
+      confirmLabel: 'Load sample',
+      confirmColor: 'error',
+    }))
   ) {
     return
   }
@@ -263,7 +283,7 @@ function exportBackup() {
   notify(`Exported ${employees.value.length} people to a JSON backup.`)
 }
 
-function confirmImport() {
+async function confirmImport() {
   const backup = importPreview.value
 
   if (!backup) {
@@ -272,7 +292,12 @@ function confirmImport() {
 
   if (
     employees.value.length > 0 &&
-    !window.confirm('Replace all people currently saved in this browser with this backup?')
+    !(await requestConfirmation({
+      title: 'Replace the current organization?',
+      message: 'All people currently saved in this browser will be replaced with this backup.',
+      confirmLabel: 'Replace organization',
+      confirmColor: 'error',
+    }))
   ) {
     return
   }
@@ -593,5 +618,14 @@ function clearFilters() {
     <v-snackbar v-model="notificationOpen" timeout="3000">
       {{ notification }}
     </v-snackbar>
+    <ConfirmationDialog
+      :model-value="confirmation.open"
+      :title="confirmation.title"
+      :message="confirmation.message"
+      :confirm-label="confirmation.confirmLabel"
+      :confirm-color="confirmation.confirmColor"
+      @update:model-value="updateConfirmationOpen"
+      @confirm="resolveConfirmation(true)"
+    />
   </v-container>
 </template>
