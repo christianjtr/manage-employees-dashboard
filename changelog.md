@@ -22,3 +22,14 @@ Project evolution notes, including the scope of each milestone and its verificat
 - **Deployment prerequisite:** Set the repository Pages publishing source to **GitHub Actions** after this branch is integrated.
 - **Local verification:** Workflow YAML syntax is valid, `npm ci`, lint, typecheck, tests (3 passing), production build and `npm audit` (0 vulnerabilities) pass. The built HTML points to assets under `/manage-employees-dashboard/`.
 - A hosted deployment cannot be verified until the branch is integrated and Pages is configured.
+
+## 2026-11-23 — Organization chart and local directory
+
+- Replaced both placeholder views with a chart-first organization view and a searchable, sortable, filterable people directory.
+- Added a recursive left-to-right chart with connected people cards, active/inactive state, branch controls, search highlighting, zoom controls and contextual profile/editor drawers.
+- Added fictional sample data, manual create/edit/delete, manager selection, status/date fields and local persistence using a versioned LocalStorage envelope.
+- Added Zod input/persisted-data validation and collection-level rules for unique IDs/emails, existing manager references and acyclic reporting relationships.
+- Deleting a manager asks for confirmation and promotes their direct reports one level; invalid stored data remains untouched until the user explicitly clears it.
+- Added domain and storage tests for forests, cycles, missing managers, duplicate emails, manager candidate filtering, persistence round-trips and invalid versions/data.
+- JSON backup/restore and CSV import remain follow-up work.
+- **Verification:** `npm run lint`, `npm run typecheck`, `npm test` (16 passing), `npm run build`, `npm audit` (0 vulnerabilities) and `git diff --check` pass. Browser smoke checks covered sample loading, create/edit and manager assignment, persistence after reload, search/path expansion, directory search/filtering, invalid-storage recovery, and mobile layout; no console errors were reported.

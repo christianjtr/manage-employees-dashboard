@@ -35,10 +35,19 @@ Durable product and architecture decisions for future development. The changelog
 - **Implication:** Keep the repository's supported Node baseline at 22.12 or newer and revisit tool major versions when the deployment runtime is established.
 
 - **Deferred dependency:** Vue Test Utils 2.6.0 currently pulls in `js-beautify` and vulnerable `glob` / `minimatch` transitive dependencies. `npm audit fix` only proposed resolving them with a forced downgrade, so it is deferred until component tests are added and a safe dependency path is available.
-- **Runtime note:** The development environment is Node 25. The newest jsdom line declares an engine range that skips Node 25, so this scaffold uses jsdom 27, which supports Node 24+ and avoids engine warnings on the current runtime.
+- **Test setup note:** Domain and persistence tests run in Vitest's Node environment. The storage service accepts an injected key-value adapter, so its tests do not rely on jsdom or browser globals.
 - **Lockfile note:** The original `package-lock.json` was npm lockfile v1 and identified its root as `test@0.0.1`, unrelated to the project manifest. It was regenerated rather than retaining stale resolutions.
+
+### 2026-11-23 — Organization chart and local data
+
+- **Decision:** Build the org chart as a recursive Vue component with CSS connectors; derive its forest from `managerId` and keep data/state in a composable plus a versioned LocalStorage service.
+- **Reason:** The product models a simple one-manager hierarchy, so a focused tree UI is easier to understand than a general diagram editor or global store.
+- **Implication:** Validate each employee with Zod, then validate duplicate IDs/emails, manager references and cycles against the full collection before save. Search highlights matches and their manager paths; all nodes remain in the hierarchy.
+- **Deletion rule:** Deleting a manager is confirmed and moves direct reports up one level to that manager's own manager, preserving valid references and the remaining tree.
+- **Recovery rule:** Invalid stored JSON/version/relationships are reported and never silently overwritten; the user must explicitly clear invalid local data before making new changes.
 
 ## Deferred scope
 
 - CSV import is phase two and is not part of the initial organization-chart milestone.
-- Organizational cycles, manager reference integrity and duplicate-email rules require validation across the full employee collection; a single employee Zod schema cannot enforce them alone.
+- CSV import is phase two; versioned JSON backup and restore are still to be implemented.
+- Organizational cycles, manager reference integrity and duplicate-email rules are enforced by full-collection validation; a single employee Zod schema cannot enforce them alone.

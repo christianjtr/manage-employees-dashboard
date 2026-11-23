@@ -1,8 +1,8 @@
 # TeamMap
 
-TeamMap is evolving into a lightweight, local-first way to understand who is in an organization and how people connect. The organization chart will be the primary experience, with a people directory for managing individual records.
+TeamMap is a lightweight, local-first way to understand who belongs to an organization, what they do and how people connect. The interactive organization chart is the primary experience, with a people directory for managing individual records.
 
-The repository is being modernized in reviewable milestones. The current branch establishes automated GitHub Pages validation and deployment; product functionality is being built in subsequent milestones.
+The repository is evolving in reviewable milestones. The current implementation includes the organization chart, people directory, browser persistence and fictional sample data. CSV import and JSON backup/restore are subsequent milestones.
 
 ## Requirements
 
@@ -37,9 +37,12 @@ npm run preview
 
 ## Project notes
 
-- The app is designed to run locally in the browser without a backend.
-- The initial visual shell keeps the existing blue accent and uses a light theme.
-- CSV import is planned for a later phase.
+- The app runs locally in the browser without a backend; changes are saved in `localStorage`.
+- The organization chart is generated from `managerId`; invalid references, duplicate IDs/emails and reporting cycles are rejected.
+- Deleting a manager asks for confirmation and promotes direct reports to that manager's own manager (or to the top level).
+- A fictional organization can be loaded for exploration; replacing existing records requires confirmation.
+- The light-only interface keeps the existing blue accent and uses a responsive sidebar and contextual detail/editor panels.
+- CSV import is planned for phase two. Versioned JSON backup/restore remains a follow-up.
 - `changelog.md` records implementation milestones and verification results.
 - `memory.md` records durable product and architecture decisions.
 

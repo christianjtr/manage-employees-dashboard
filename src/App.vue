@@ -2,12 +2,37 @@
 import { ref, watch } from 'vue'
 import { useDisplay } from 'vuetify'
 
+import { useEmployees } from '@/composables/useEmployees'
+
 const { mobile } = useDisplay()
 const drawer = ref(!mobile.value)
+const storageMessage = ref('')
+const storageSnackbarOpen = ref(false)
+const { storageIssue, requiresRecovery, recoverSavedData } = useEmployees()
 
 watch(mobile, (isMobile) => {
   drawer.value = !isMobile
 })
+
+watch(storageIssue, (message) => {
+  if (message && !requiresRecovery.value) {
+    storageMessage.value = message
+    storageSnackbarOpen.value = true
+  }
+}, { immediate: true })
+
+function clearInvalidData() {
+  if (!window.confirm('Clear the unreadable saved organization data?')) {
+    return
+  }
+
+  const result = recoverSavedData()
+
+  if (!result.success) {
+    storageMessage.value = result.message
+    storageSnackbarOpen.value = true
+  }
+}
 </script>
 
 <template>
@@ -79,7 +104,29 @@ watch(mobile, (isMobile) => {
     </v-navigation-drawer>
 
     <v-main class="app-main">
+      <v-alert
+        v-if="requiresRecovery"
+        class="storage-recovery-alert"
+        type="warning"
+        variant="tonal"
+        prominent
+      >
+        <div class="storage-recovery-content">
+          <div>
+            <strong>Saved data needs attention</strong>
+            <p>{{ storageIssue }}</p>
+            <small>TeamMap has not overwritten this browser data.</small>
+          </div>
+          <v-btn color="warning" variant="flat" @click="clearInvalidData">
+            Clear invalid data
+          </v-btn>
+        </div>
+      </v-alert>
       <router-view />
     </v-main>
+
+    <v-snackbar v-model="storageSnackbarOpen" timeout="4500">
+      {{ storageMessage }}
+    </v-snackbar>
   </v-app>
 </template>
