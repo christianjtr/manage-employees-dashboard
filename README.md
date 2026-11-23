@@ -2,7 +2,7 @@
 
 TeamMap is evolving into a lightweight, local-first way to understand who is in an organization and how people connect. The organization chart will be the primary experience, with a people directory for managing individual records.
 
-The repository is being modernized in reviewable milestones. The current branch establishes the frontend toolchain and application shell; product functionality and automated GitHub Pages deployment are subsequent milestones.
+The repository is being modernized in reviewable milestones. The current branch establishes automated GitHub Pages validation and deployment; product functionality is being built in subsequent milestones.
 
 ## Requirements
 
@@ -43,4 +43,4 @@ npm run preview
 - `changelog.md` records implementation milestones and verification results.
 - `memory.md` records durable product and architecture decisions.
 
-The public demo remains at <https://christianjtr.github.io/manage-employees-dashboard> and will be updated after the GitHub Pages workflow is introduced.
+The public demo is <https://christianjtr.github.io/manage-employees-dashboard>. After this branch is integrated, configure the repository's Pages publishing source to **GitHub Actions** to enable automatic deployment from `main`.

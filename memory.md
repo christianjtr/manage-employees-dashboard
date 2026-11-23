@@ -16,6 +16,12 @@ Durable product and architecture decisions for future development. The changelog
 - **Reason:** The first intended deployment is the existing public demo URL and a single local browser user.
 - **Implication:** Persistence, versioned JSON backup/restore and import validation belong in the client. Do not rely on server-side SPA rewrites.
 
+### 2026-11-23 — GitHub Pages delivery
+
+- **Decision:** Validate every pull request to `main`, but only deploy from `main` (or a manual run targeting `main`) through the `github-pages` environment.
+- **Reason:** Keep preview branches from replacing the public demo and ensure only validated production builds are published.
+- **Implication:** The repository Pages publishing source must be set to **GitHub Actions**. Vite's base path stays `/manage-employees-dashboard/`; static Pages assets and hash-based routes depend on it.
+
 ### 2026-11-23 — Visual baseline
 
 - **Decision:** Start with a light-only theme, keep the current blue as the primary accent, and use neutral surfaces. Organization is the primary route; People is secondary.
