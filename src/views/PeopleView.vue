@@ -12,8 +12,11 @@ import { useEmployees } from '@/composables/useEmployees'
 import {
   parseOrganizationBackupText,
   serializeOrganizationBackup,
-  type OrganizationBackup,
 } from '@/services/organization-backup'
+import {
+  parseOrganizationCsvText,
+  serializeOrganizationCsvTemplate,
+} from '@/services/organization-csv'
 
 const {
   employees,
@@ -36,11 +39,13 @@ const editorOpen = ref(false)
 const notification = ref('')
 const notificationOpen = ref(false)
 const importDialogOpen = ref(false)
+const importFormat = ref<'json' | 'csv'>('json')
 const importInput = ref<HTMLInputElement | null>(null)
 const importFilename = ref('')
+const importExportedAt = ref<string | null>(null)
 const importError = ref('')
 const importBusy = ref(false)
-const importPreview = ref<OrganizationBackup | null>(null)
+const importPreview = ref<Employee[] | null>(null)
 const {
   confirmation,
   requestConfirmation,
@@ -132,13 +137,11 @@ const headers = computed(() =>
 )
 const importActiveCount = computed(
   () =>
-    importPreview.value?.employees.filter((employee) => employee.status === 'active')
-      .length ?? 0,
+    importPreview.value?.filter((employee) => employee.status === 'active').length ?? 0,
 )
 const importDepartmentCount = computed(
   () =>
-    new Set(importPreview.value?.employees.map((employee) => employee.department) ?? [])
-      .size,
+    new Set(importPreview.value?.map((employee) => employee.department) ?? []).size,
 )
 
 function openEditor(
@@ -223,8 +226,10 @@ async function loadSample() {
   notify(result.success ? 'Sample organization loaded.' : result.message)
 }
 
-function openImportDialog() {
+function openImportDialog(format: 'json' | 'csv') {
+  importFormat.value = format
   importFilename.value = ''
+  importExportedAt.value = null
   importError.value = ''
   importPreview.value = null
   importDialogOpen.value = true
@@ -243,17 +248,31 @@ async function readImportFile(event: Event) {
   }
 
   importFilename.value = file.name
+  importExportedAt.value = null
   importError.value = ''
   importPreview.value = null
   importBusy.value = true
 
   try {
-    const result = parseOrganizationBackupText(await file.text())
+    const text = await file.text()
 
-    if (result.success) {
-      importPreview.value = result.backup
+    if (importFormat.value === 'csv') {
+      const result = parseOrganizationCsvText(text)
+
+      if (result.success) {
+        importPreview.value = result.employees
+      } else {
+        importError.value = result.message
+      }
     } else {
-      importError.value = result.message
+      const result = parseOrganizationBackupText(text)
+
+      if (result.success) {
+        importPreview.value = result.backup.employees
+        importExportedAt.value = result.backup.exportedAt
+      } else {
+        importError.value = result.message
+      }
     }
   } catch {
     importError.value = 'The selected file could not be read.'
@@ -283,10 +302,25 @@ function exportBackup() {
   notify(`Exported ${employees.value.length} people to a JSON backup.`)
 }
 
-async function confirmImport() {
-  const backup = importPreview.value
+function downloadCsvTemplate() {
+  const blob = new Blob([serializeOrganizationCsvTemplate()], {
+    type: 'text/csv;charset=utf-8',
+  })
+  const objectUrl = URL.createObjectURL(blob)
+  const anchor = document.createElement('a')
+  anchor.href = objectUrl
+  anchor.download = 'teammap-people-template.csv'
+  document.body.append(anchor)
+  anchor.click()
+  anchor.remove()
+  window.setTimeout(() => URL.revokeObjectURL(objectUrl), 0)
+  notify('Downloaded the CSV import template.')
+}
 
-  if (!backup) {
+async function confirmImport() {
+  const importedEmployees = importPreview.value
+
+  if (!importedEmployees) {
     return
   }
 
@@ -294,15 +328,15 @@ async function confirmImport() {
     employees.value.length > 0 &&
     !(await requestConfirmation({
       title: 'Replace the current organization?',
-      message: 'All people currently saved in this browser will be replaced with this backup.',
-      confirmLabel: 'Replace organization',
+      message: `All people currently saved in this browser will be replaced with this ${importFormat.value === 'csv' ? 'CSV file' : 'backup'}.`,
+      confirmLabel: importFormat.value === 'csv' ? 'Import people' : 'Replace organization',
       confirmColor: 'error',
     }))
   ) {
     return
   }
 
-  const result = replaceOrganization(backup.employees)
+  const result = replaceOrganization(importedEmployees)
 
   if (!result.success) {
     importError.value = result.message
@@ -311,7 +345,9 @@ async function confirmImport() {
 
   importDialogOpen.value = false
   selectedId.value = null
-  notify(`Restored ${backup.employees.length} people from ${importFilename.value}.`)
+  notify(
+    `${importFormat.value === 'csv' ? 'Imported' : 'Restored'} ${importedEmployees.length} people from ${importFilename.value}.`,
+  )
 }
 
 function clearFilters() {
@@ -363,10 +399,23 @@ function clearFilters() {
             />
             <v-divider v-if="mobile" />
             <v-list-item
+              aria-label="Import CSV file"
+              prepend-icon="mdi-file-delimited-outline"
+              title="Import CSV"
+              @click="openImportDialog('csv')"
+            />
+            <v-list-item
+              aria-label="Download CSV template"
+              prepend-icon="mdi-file-download-outline"
+              title="Download CSV template"
+              @click="downloadCsvTemplate"
+            />
+            <v-divider />
+            <v-list-item
               aria-label="Import JSON backup"
               prepend-icon="mdi-import"
               title="Import JSON backup"
-              @click="openImportDialog"
+              @click="openImportDialog('json')"
             />
             <v-list-item
               aria-label="Export JSON backup"
@@ -534,8 +583,8 @@ function clearFilters() {
       ref="importInput"
       class="file-input-hidden"
       type="file"
-      accept="application/json,.json"
-      aria-label="Choose a TeamMap JSON backup"
+      :accept="importFormat === 'csv' ? 'text/csv,.csv' : 'application/json,.json'"
+      :aria-label="importFormat === 'csv' ? 'Choose a CSV file' : 'Choose a TeamMap JSON backup'"
       @change="readImportFile"
     />
     <v-dialog v-model="importDialogOpen" max-width="600">
@@ -543,7 +592,7 @@ function clearFilters() {
         <div class="drawer-heading">
           <div>
             <p class="eyebrow">DATA</p>
-            <h2>Restore from JSON backup</h2>
+            <h2>{{ importFormat === 'csv' ? 'Import people from CSV' : 'Restore from JSON backup' }}</h2>
           </div>
           <v-btn
             icon="mdi-close"
@@ -555,8 +604,16 @@ function clearFilters() {
         <v-divider />
         <v-card-text class="backup-dialog-content">
           <p>
-            Select a TeamMap backup. The complete file is validated before it can
-            replace the people currently stored in this browser.
+            <template v-if="importFormat === 'csv'">
+              Select a CSV file with firstName, lastName, email, position and
+              department columns. managerEmail, status, joinedAt and avatar are
+              optional; manager emails must match people in the same file, status
+              defaults to active, and joinedAt uses YYYY-MM-DD.
+            </template>
+            <template v-else>
+              Select a TeamMap backup. The complete file is validated before it can
+              replace the people currently stored in this browser.
+            </template>
           </p>
           <div class="backup-file-picker">
             <v-btn
@@ -565,7 +622,7 @@ function clearFilters() {
               :loading="importBusy"
               @click="chooseImportFile"
             >
-              Choose JSON file
+              {{ importFormat === 'csv' ? 'Choose CSV file' : 'Choose JSON file' }}
             </v-btn>
             <span v-if="importFilename" class="backup-filename">
               {{ importFilename }}
@@ -577,11 +634,11 @@ function clearFilters() {
           </v-alert>
 
           <v-card v-if="importPreview" class="backup-preview" variant="outlined">
-            <v-card-title>Backup preview</v-card-title>
+            <v-card-title>Import preview</v-card-title>
             <v-card-text>
               <div class="backup-stat-grid">
                 <div>
-                  <strong>{{ importPreview.employees.length }}</strong>
+                  <strong>{{ importPreview.length }}</strong>
                   <span>people</span>
                 </div>
                 <div>
@@ -593,13 +650,16 @@ function clearFilters() {
                   <span>departments</span>
                 </div>
               </div>
-              <p>Exported {{ new Date(importPreview.exportedAt).toLocaleString() }}</p>
+              <p v-if="importExportedAt">
+                Exported {{ new Date(importExportedAt).toLocaleString() }}
+              </p>
             </v-card-text>
           </v-card>
 
           <v-alert v-if="importPreview" type="warning" variant="tonal">
             Import replaces the current organization in this browser. No records
-            are imported unless the entire backup is valid and you confirm.
+            are changed unless the complete {{ importFormat === 'csv' ? 'CSV file' : 'backup' }}
+            is valid and you confirm.
           </v-alert>
         </v-card-text>
         <v-card-actions class="backup-dialog-actions">
@@ -610,7 +670,7 @@ function clearFilters() {
             :disabled="!importPreview || importBusy"
             @click="confirmImport"
           >
-            Replace organization
+            {{ importFormat === 'csv' ? 'Import people' : 'Replace organization' }}
           </v-btn>
         </v-card-actions>
       </v-card>

@@ -58,3 +58,11 @@ Project evolution notes, including the scope of each milestone and its verificat
 - Bound the brand icon background to Vuetify's primary theme variable, keeping it slate with primary action buttons.
 - Expanded the Organization page to the full available width, auto-fit the chart to the canvas while preserving a readable minimum scale, and added native fullscreen plus a fixed-viewport fallback. Entering fullscreen refits the chart; exiting restores its previous zoom.
 - **Verification:** `npm run lint`, `npm run typecheck`, `npm test` (22 passing), `npm run build`, `npm audit` (0 vulnerabilities) and `git diff --check` pass. Browser checks confirmed compact 40–42 px editor fields on desktop/mobile, separated sidebar controls and slate brand icon, chart auto-fit at desktop/mobile sizes, and fullscreen entry/exit with zoom restoration.
+
+## 2026-11-23 — CSV people import
+
+- Added a strict CSV parser for quoted fields, escaped quotes, embedded line breaks and UTF-8 BOM files.
+- Defined required identity/role columns and optional manager-email, status, start-date and avatar columns. Manager relationships resolve by email and the complete collection is validated for duplicates, missing references and cycles.
+- Added import preview with people/active/department counts, all-or-nothing confirmation, Vuetify error feedback and a downloadable CSV header template in People → Data.
+- Generated internal IDs and timestamps during import; blank status defaults to active. CSV import can also restore the organization when saved browser data is invalid.
+- **Verification:** `npm ci`, `npm run lint`, `npm run typecheck`, `npm test` (30 passing), `npm run build`, `npm audit` (0 vulnerabilities) and `git diff --check` pass. Browser smoke checks imported a CSV with a manager relationship, showed preview counts, prompted before replacement and replaced the 17-person sample with the 2 imported rows.

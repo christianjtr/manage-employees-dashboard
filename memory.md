@@ -52,7 +52,12 @@ Durable product and architecture decisions for future development. The changelog
 - **Reason:** Local-first browser storage needs user-controlled backup and restoration without a backend.
 - **Implication:** Validate the file schema and the complete manager graph before preview; restore replaces all records only after explicit confirmation and one successful storage write. Unsupported versions and any invalid row reject the whole file, with no partial import.
 
+### 2026-11-23 — CSV import format
+
+- **Decision:** Accept CSV with required `firstName`, `lastName`, `email`, `position` and `department` columns; `managerEmail`, `status`, `joinedAt` and `avatar` are optional. Resolve manager links by email within the same file and generate IDs/timestamps during import.
+- **Reason:** CSV should be portable for people data without exposing browser-generated record IDs or timestamps.
+- **Implication:** Normalize and validate every row, resolve the full manager graph, then preview and replace the organization all-or-nothing after confirmation. Provide a downloadable header template from the People data menu.
+
 ## Deferred scope
 
-- CSV import is phase two; versioned JSON backup/restore is available in the People view.
 - Organizational cycles, manager reference integrity and duplicate-email rules are enforced by full-collection validation; a single employee Zod schema cannot enforce them alone.
