@@ -2,6 +2,7 @@
   "name": "teammap",
   "version": "0.1.0",
   "description": "A lightweight local-first organization map",
+  "license": "MIT",
   "private": true,
   "type": "module",
   "engines": {

@@ -70,6 +70,12 @@ Durable product and architecture decisions for future development. The changelog
 - **Reason:** Vuetify 4 changes the default theme to system, reduces breakpoints, removes uppercase buttons, converts alerts to grid layout, and changes typography/reset/CSS layering. The existing UI depends on the v3 visual baseline.
 - **Implication:** Keep `theme.defaultTheme: 'light'`, `display.thresholds` (md 960, lg 1280, xl 1920, xxl 2560) and `defaults.VBtn.class: 'text-uppercase'` in `src/plugins/vuetify.ts`. Keep `.app-main` as a flex column so the storage-recovery alert stacks above views instead of shrinking into a narrow grid item. Vuetify 4 clearable text fields emit `null`, so keep search normalization null-safe (`value ?? ''`) and model types `string | null`. Re-check dialogs, snackbars, tables and mobile overflow after future Vuetify upgrades.
 
+### 2026-11-23 — MIT licensing
+
+- **Decision:** Distribute TeamMap under the MIT License.
+- **Reason:** It is a permissive, widely understood license that fits a small local-first demo and allows reuse with minimal friction.
+- **Implication:** Keep `LICENSE`, the `license` field in `package.json` and the README license link in sync. Contributors keep attribution and the warranty disclaimer intact.
+
 ## Deferred scope
 
 - Organizational cycles, manager reference integrity and duplicate-email rules are enforced by full-collection validation; a single employee Zod schema cannot enforce them alone.

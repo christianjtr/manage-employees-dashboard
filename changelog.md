@@ -88,3 +88,16 @@ Project evolution notes, including the scope of each milestone and its verificat
 - Fixed the Organization and People clearable search inputs not clearing after upgrading to Vuetify 4. The clear icon sets the model to `null`, which made `normalize()` throw and left the visible text and active filter unchanged.
 - Search state is now typed as `string | null`, and normalization coerces `null`/`undefined` to an empty string so the input, match count and directory rows reset together.
 - **Verification:** `npm run lint`, `npm run typecheck`, `npm test` (30 passing), `npm run build`, `npm audit` (0 vulnerabilities) and `git diff --check` pass. Browser checks typed text into both search fields, clicked each clear icon, confirmed empty inputs/reset filters and found no console errors.
+
+## 2026-11-23 — Product-first README and screenshots
+
+- Rewrote `README.md` around the real product promise: a local-first, single-browser tool for understanding and maintaining a small organization, with an explicit note about what it does not do.
+- Added four screenshots under `docs/screenshots/` showing the Organization chart and People directory on desktop and mobile, embedded directly in the README preview section.
+- Moved setup, checks and stack details below the product/privacy narrative and kept the public demo link and data portability guidance prominent.
+- **Verification:** Screenshot files were generated from the running development app with no console errors. `npm run lint`, `npm run typecheck`, `npm test` (30 passing), `npm run build`, `npm audit` (0 vulnerabilities) and `git diff --check` pass.
+
+## 2026-11-23 — MIT license
+
+- Added a standard MIT `LICENSE` file with the project owner as copyright holder.
+- Declared `"license": "MIT"` in `package.json` and linked the license from the README.
+- **Verification:** `npm run lint`, `npm run typecheck`, `npm test` (30 passing), `npm run build`, `npm audit` (0 vulnerabilities) and `git diff --check` pass.
