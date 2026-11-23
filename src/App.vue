@@ -3,8 +3,8 @@ import { computed, ref, watch } from 'vue'
 import { useDisplay } from 'vuetify'
 
 import ConfirmationDialog from '@/components/ConfirmationDialog.vue'
-import { useEmployees } from '@/composables/useEmployees'
 import { useConfirmation } from '@/composables/useConfirmation'
+import { useEmployees } from '@/composables/useEmployees'
 
 const { mobile } = useDisplay()
 const drawer = ref(!mobile.value)
@@ -78,34 +78,22 @@ async function clearInvalidData() {
       color="surface"
       width="256"
     >
-      <div class="brand-lockup" :class="{ 'brand-lockup-rail': desktopRail }">
-        <div
-          class="brand-mark"
-          aria-hidden="true"
-        >
-          <v-icon
-            icon="mdi-family-tree"
-            size="22"
-          />
+      <div class="sidebar-header" :class="{ 'sidebar-header-rail': desktopRail }">
+        <div class="brand-lockup">
+          <div class="brand-mark" aria-hidden="true">
+            <v-icon icon="mdi-family-tree" size="22" />
+          </div>
+          <span v-if="!desktopRail" class="brand-name">TeamMap</span>
         </div>
-        <span v-if="!desktopRail">TeamMap</span>
-        <v-spacer v-if="!desktopRail" />
-        <v-tooltip
+        <v-btn
           v-if="!mobile"
-          :text="desktopRail ? 'Expand sidebar' : 'Collapse sidebar'"
-          location="right"
-        >
-          <template #activator="{ props }">
-            <v-btn
-              v-bind="props"
-              class="sidebar-toggle"
-              :aria-label="desktopRail ? 'Expand sidebar' : 'Collapse sidebar'"
-              :icon="desktopRail ? 'mdi-chevron-double-right' : 'mdi-chevron-double-left'"
-              variant="text"
-              @click="sidebarCollapsed = !sidebarCollapsed"
-            />
-          </template>
-        </v-tooltip>
+          class="sidebar-toggle"
+          :title="desktopRail ? 'Expand sidebar' : 'Collapse sidebar'"
+          :aria-label="desktopRail ? 'Expand sidebar' : 'Collapse sidebar'"
+          :icon="desktopRail ? 'mdi-chevron-double-right' : 'mdi-chevron-double-left'"
+          variant="text"
+          @click="sidebarCollapsed = !sidebarCollapsed"
+        />
       </div>
 
       <v-divider />

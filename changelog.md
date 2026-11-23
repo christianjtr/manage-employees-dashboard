@@ -50,3 +50,11 @@ Project evolution notes, including the scope of each milestone and its verificat
 - Reduced the height of all people-editor inputs with compact density and automatic detail display; prevented flex layout from stretching fields vertically.
 - Made the organization chart fill the remaining viewport height and scroll within the chart area.
 - **Verification:** `npm ci`, `npm run lint`, `npm run typecheck`, `npm test` (22 passing), `npm run build`, `npm audit` (0 vulnerabilities) and `git diff --check` pass. Browser checks confirmed Vuetify confirmations, desktop rail toggling and icon changes, compact 40–42 px editor fields, chart viewport sizing/internal scrolling, and preserved directory scrolling.
+
+## 2026-11-23 — Form, sidebar and chart display corrections
+
+- Reworked editor fields into intrinsic-height grid rows so compact controls stay at 40–42 px on desktop and mobile instead of growing to fill the drawer.
+- Rebuilt the sidebar header with separate fixed grid tracks for brand and collapse control; the rail stacks and centers them without shrinking.
+- Bound the brand icon background to Vuetify's primary theme variable, keeping it slate with primary action buttons.
+- Expanded the Organization page to the full available width, auto-fit the chart to the canvas while preserving a readable minimum scale, and added native fullscreen plus a fixed-viewport fallback. Entering fullscreen refits the chart; exiting restores its previous zoom.
+- **Verification:** `npm run lint`, `npm run typecheck`, `npm test` (22 passing), `npm run build`, `npm audit` (0 vulnerabilities) and `git diff --check` pass. Browser checks confirmed compact 40–42 px editor fields on desktop/mobile, separated sidebar controls and slate brand icon, chart auto-fit at desktop/mobile sizes, and fullscreen entry/exit with zoom restoration.
