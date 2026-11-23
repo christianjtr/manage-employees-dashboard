@@ -65,6 +65,18 @@ describe('organization storage', () => {
     expect(storage.getItem(organizationStorageKey)).toBe('{not json')
   })
 
+  it('allows an explicit valid restore to replace invalid saved data', () => {
+    storage.setItem(organizationStorageKey, '{not json')
+
+    const result = saveOrganization(sampleOrganization, storage)
+
+    expect(result.success).toBe(true)
+    expect(loadOrganization(storage)).toEqual({
+      status: 'loaded',
+      employees: sampleOrganization,
+    })
+  })
+
   it('rejects an unsupported stored schema version', () => {
     storage.setItem(
       organizationStorageKey,

@@ -6,7 +6,10 @@ import {
   type Employee,
   type EmployeeInput,
 } from '@/domain/employee'
-import { removeEmployeeAndPromoteReports } from '@/domain/organization'
+import {
+  removeEmployeeAndPromoteReports,
+  validateOrganization,
+} from '@/domain/organization'
 import { sampleOrganization } from '@/data/sample-organization'
 import {
   clearSavedOrganization,
@@ -29,8 +32,8 @@ const storageIssue = ref(
 )
 const requiresRecovery = ref(initialLoad.status === 'invalid')
 
-function saveNext(records: Employee[]): MutationResult {
-  if (requiresRecovery.value) {
+function saveNext(records: Employee[], allowRecovery = false): MutationResult {
+  if (requiresRecovery.value && !allowRecovery) {
     return {
       success: false,
       message: 'Clear or restore the invalid saved data before making changes.',
@@ -45,6 +48,7 @@ function saveNext(records: Employee[]): MutationResult {
   }
 
   employeeRecords.value = result.employees
+  requiresRecovery.value = false
   storageIssue.value = null
   return { success: true }
 }
@@ -123,6 +127,20 @@ function loadSampleOrganization(): MutationResult {
   return result.success ? { success: true } : result
 }
 
+function replaceOrganization(input: unknown): MutationResult {
+  const organization = validateOrganization(input)
+
+  if (!organization.success) {
+    return {
+      success: false,
+      message:
+        organization.issues[0]?.message ?? 'The selected organization data is invalid.',
+    }
+  }
+
+  return saveNext(organization.employees, true)
+}
+
 function recoverSavedData(): MutationResult {
   if (!clearSavedOrganization()) {
     return {
@@ -152,6 +170,7 @@ export function useEmployees() {
     updateEmployee,
     deleteEmployee,
     loadSampleOrganization,
+    replaceOrganization,
     recoverSavedData,
   }
 }

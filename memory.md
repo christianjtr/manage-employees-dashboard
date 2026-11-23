@@ -44,10 +44,15 @@ Durable product and architecture decisions for future development. The changelog
 - **Reason:** The product models a simple one-manager hierarchy, so a focused tree UI is easier to understand than a general diagram editor or global store.
 - **Implication:** Validate each employee with Zod, then validate duplicate IDs/emails, manager references and cycles against the full collection before save. Search highlights matches and their manager paths; all nodes remain in the hierarchy.
 - **Deletion rule:** Deleting a manager is confirmed and moves direct reports up one level to that manager's own manager, preserving valid references and the remaining tree.
-- **Recovery rule:** Invalid stored JSON/version/relationships are reported and never silently overwritten; the user must explicitly clear invalid local data before making new changes.
+- **Recovery rule:** Invalid stored JSON/version/relationships are reported and never silently overwritten. The user must explicitly clear the invalid data or confirm a valid JSON-backup restore before replacing it.
+
+### 2026-11-23 — JSON backup portability
+
+- **Decision:** Export and restore a strict JSON envelope with `format: "teammap-backup"`, `schemaVersion: 1`, `exportedAt` and the complete employee collection.
+- **Reason:** Local-first browser storage needs user-controlled backup and restoration without a backend.
+- **Implication:** Validate the file schema and the complete manager graph before preview; restore replaces all records only after explicit confirmation and one successful storage write. Unsupported versions and any invalid row reject the whole file, with no partial import.
 
 ## Deferred scope
 
-- CSV import is phase two and is not part of the initial organization-chart milestone.
-- CSV import is phase two; versioned JSON backup and restore are still to be implemented.
+- CSV import is phase two; versioned JSON backup/restore is available in the People view.
 - Organizational cycles, manager reference integrity and duplicate-email rules are enforced by full-collection validation; a single employee Zod schema cannot enforce them alone.

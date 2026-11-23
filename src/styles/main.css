@@ -713,6 +713,78 @@ body {
   justify-content: flex-end;
 }
 
+.file-input-hidden {
+  display: none;
+}
+
+.backup-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 24px;
+}
+
+.backup-dialog-content > p {
+  margin: 0;
+  color: #595d65;
+  line-height: 1.6;
+}
+
+.backup-file-picker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.backup-filename {
+  overflow: hidden;
+  color: #595d65;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.backup-preview.v-card {
+  border-color: #e4e7eb;
+  background: #fafbfc;
+}
+
+.backup-preview .v-card-title {
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.backup-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.backup-stat-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.backup-stat-grid strong {
+  color: #17181c;
+  font-size: 20px;
+}
+
+.backup-stat-grid span,
+.backup-preview .v-card-text > p {
+  color: #737780;
+  font-size: 12px;
+}
+
+.backup-preview .v-card-text > p {
+  margin: 16px 0 0;
+}
+
+.backup-dialog-actions {
+  padding: 12px 24px 20px;
+}
+
 @media (max-width: 600px) {
   .page-container {
     padding: 28px 20px;
@@ -734,6 +806,34 @@ body {
   }
 
   .organization-actions .v-btn {
+    flex: 1;
+  }
+
+  .organization-actions .v-menu {
+    display: flex;
+    flex: 1;
+  }
+
+  .organization-actions .v-menu .v-btn {
+    width: 100%;
+  }
+
+  .people-page .organization-actions .sample-action {
+    display: none;
+  }
+
+  .people-page .organization-actions .v-menu {
+    flex: 0 0 48px;
+  }
+
+  .people-page .organization-actions .data-actions-button {
+    width: 48px;
+    min-width: 48px;
+    flex: 0 0 48px;
+    padding: 0;
+  }
+
+  .people-page .organization-actions > .v-btn:last-child {
     flex: 1;
   }
 

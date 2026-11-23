@@ -7,6 +7,11 @@ import EmployeeEditorPanel from '@/components/people/EmployeeEditorPanel.vue'
 import type { Employee, EmployeeInput } from '@/domain/employee'
 import { getFullName } from '@/domain/organization'
 import { useEmployees } from '@/composables/useEmployees'
+import {
+  parseOrganizationBackupText,
+  serializeOrganizationBackup,
+  type OrganizationBackup,
+} from '@/services/organization-backup'
 
 const {
   employees,
@@ -14,6 +19,7 @@ const {
   updateEmployee,
   deleteEmployee,
   loadSampleOrganization,
+  replaceOrganization,
 } = useEmployees()
 const { mobile } = useDisplay()
 
@@ -27,6 +33,12 @@ const defaultManagerId = ref<string | null>(null)
 const editorOpen = ref(false)
 const notification = ref('')
 const notificationOpen = ref(false)
+const importDialogOpen = ref(false)
+const importInput = ref<HTMLInputElement | null>(null)
+const importFilename = ref('')
+const importError = ref('')
+const importBusy = ref(false)
+const importPreview = ref<OrganizationBackup | null>(null)
 
 const selectedEmployee = computed(
   () => employees.value.find((employee) => employee.id === selectedId.value) ?? null,
@@ -110,6 +122,16 @@ const headers = computed(() =>
       ]
     : desktopHeaders,
 )
+const importActiveCount = computed(
+  () =>
+    importPreview.value?.employees.filter((employee) => employee.status === 'active')
+      .length ?? 0,
+)
+const importDepartmentCount = computed(
+  () =>
+    new Set(importPreview.value?.employees.map((employee) => employee.department) ?? [])
+      .size,
+)
 
 function openEditor(
   employee: Employee | null = null,
@@ -181,6 +203,92 @@ function loadSample() {
   notify(result.success ? 'Sample organization loaded.' : result.message)
 }
 
+function openImportDialog() {
+  importFilename.value = ''
+  importError.value = ''
+  importPreview.value = null
+  importDialogOpen.value = true
+}
+
+function chooseImportFile() {
+  importInput.value?.click()
+}
+
+async function readImportFile(event: Event) {
+  const input = event.currentTarget as HTMLInputElement
+  const file = input.files?.[0]
+
+  if (!file) {
+    return
+  }
+
+  importFilename.value = file.name
+  importError.value = ''
+  importPreview.value = null
+  importBusy.value = true
+
+  try {
+    const result = parseOrganizationBackupText(await file.text())
+
+    if (result.success) {
+      importPreview.value = result.backup
+    } else {
+      importError.value = result.message
+    }
+  } catch {
+    importError.value = 'The selected file could not be read.'
+  } finally {
+    importBusy.value = false
+    input.value = ''
+  }
+}
+
+function exportBackup() {
+  const result = serializeOrganizationBackup(employees.value)
+
+  if (!result.success) {
+    notify(result.message)
+    return
+  }
+
+  const blob = new Blob([result.json], { type: 'application/json' })
+  const objectUrl = URL.createObjectURL(blob)
+  const anchor = document.createElement('a')
+  anchor.href = objectUrl
+  anchor.download = `teammap-backup-${result.backup.exportedAt.slice(0, 10)}.json`
+  document.body.append(anchor)
+  anchor.click()
+  anchor.remove()
+  window.setTimeout(() => URL.revokeObjectURL(objectUrl), 0)
+  notify(`Exported ${employees.value.length} people to a JSON backup.`)
+}
+
+function confirmImport() {
+  const backup = importPreview.value
+
+  if (!backup) {
+    return
+  }
+
+  if (
+    employees.value.length > 0 &&
+    !window.confirm('Replace all people currently saved in this browser with this backup?')
+  ) {
+    return
+  }
+
+  const result = replaceOrganization(backup.employees)
+
+  if (!result.success) {
+    importError.value = result.message
+    return
+  }
+
+  importDialogOpen.value = false
+  selectedId.value = null
+  notify(`Restored ${backup.employees.length} people from ${importFilename.value}.`)
+}
+
 function clearFilters() {
   search.value = ''
   departmentFilter.value = null
@@ -201,12 +309,49 @@ function clearFilters() {
       </div>
       <div class="organization-actions">
         <v-btn
+          class="sample-action"
           variant="outlined"
           prepend-icon="mdi-database-import-outline"
           @click="loadSample"
         >
           Load sample
         </v-btn>
+        <v-menu>
+          <template #activator="{ props }">
+            <v-btn
+              class="data-actions-button"
+              v-bind="props"
+              :icon="mobile"
+              :aria-label="mobile ? 'Data actions' : undefined"
+              variant="outlined"
+            >
+              <v-icon icon="mdi-database-import-outline" />
+              <span v-if="!mobile">Data</span>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item
+              v-if="mobile"
+              prepend-icon="mdi-database-import-outline"
+              title="Load sample organization"
+              @click="loadSample"
+            />
+            <v-divider v-if="mobile" />
+            <v-list-item
+              aria-label="Import JSON backup"
+              prepend-icon="mdi-import"
+              title="Import JSON backup"
+              @click="openImportDialog"
+            />
+            <v-list-item
+              aria-label="Export JSON backup"
+              prepend-icon="mdi-export"
+              title="Export JSON backup"
+              :disabled="employees.length === 0"
+              @click="exportBackup"
+            />
+          </v-list>
+        </v-menu>
         <v-btn
           color="primary"
           prepend-icon="mdi-account-plus-outline"
@@ -360,6 +505,91 @@ function clearFilters() {
       :default-manager-id="defaultManagerId"
       @save="savePerson"
     />
+    <input
+      ref="importInput"
+      class="file-input-hidden"
+      type="file"
+      accept="application/json,.json"
+      aria-label="Choose a TeamMap JSON backup"
+      @change="readImportFile"
+    />
+    <v-dialog v-model="importDialogOpen" max-width="600">
+      <v-card class="backup-dialog" rounded="lg">
+        <div class="drawer-heading">
+          <div>
+            <p class="eyebrow">DATA</p>
+            <h2>Restore from JSON backup</h2>
+          </div>
+          <v-btn
+            icon="mdi-close"
+            aria-label="Close import dialog"
+            variant="text"
+            @click="importDialogOpen = false"
+          />
+        </div>
+        <v-divider />
+        <v-card-text class="backup-dialog-content">
+          <p>
+            Select a TeamMap backup. The complete file is validated before it can
+            replace the people currently stored in this browser.
+          </p>
+          <div class="backup-file-picker">
+            <v-btn
+              prepend-icon="mdi-file-upload-outline"
+              variant="outlined"
+              :loading="importBusy"
+              @click="chooseImportFile"
+            >
+              Choose JSON file
+            </v-btn>
+            <span v-if="importFilename" class="backup-filename">
+              {{ importFilename }}
+            </span>
+          </div>
+
+          <v-alert v-if="importError" type="error" variant="tonal">
+            {{ importError }}
+          </v-alert>
+
+          <v-card v-if="importPreview" class="backup-preview" variant="outlined">
+            <v-card-title>Backup preview</v-card-title>
+            <v-card-text>
+              <div class="backup-stat-grid">
+                <div>
+                  <strong>{{ importPreview.employees.length }}</strong>
+                  <span>people</span>
+                </div>
+                <div>
+                  <strong>{{ importActiveCount }}</strong>
+                  <span>active</span>
+                </div>
+                <div>
+                  <strong>{{ importDepartmentCount }}</strong>
+                  <span>departments</span>
+                </div>
+              </div>
+              <p>Exported {{ new Date(importPreview.exportedAt).toLocaleString() }}</p>
+            </v-card-text>
+          </v-card>
+
+          <v-alert v-if="importPreview" type="warning" variant="tonal">
+            Import replaces the current organization in this browser. No records
+            are imported unless the entire backup is valid and you confirm.
+          </v-alert>
+        </v-card-text>
+        <v-card-actions class="backup-dialog-actions">
+          <v-spacer />
+          <v-btn variant="text" @click="importDialogOpen = false">Cancel</v-btn>
+          <v-btn
+            color="primary"
+            :disabled="!importPreview || importBusy"
+            @click="confirmImport"
+          >
+            Replace organization
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-snackbar v-model="notificationOpen" timeout="3000">
       {{ notification }}
     </v-snackbar>

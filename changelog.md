@@ -29,7 +29,15 @@ Project evolution notes, including the scope of each milestone and its verificat
 - Added a recursive left-to-right chart with connected people cards, active/inactive state, branch controls, search highlighting, zoom controls and contextual profile/editor drawers.
 - Added fictional sample data, manual create/edit/delete, manager selection, status/date fields and local persistence using a versioned LocalStorage envelope.
 - Added Zod input/persisted-data validation and collection-level rules for unique IDs/emails, existing manager references and acyclic reporting relationships.
-- Deleting a manager asks for confirmation and promotes their direct reports one level; invalid stored data remains untouched until the user explicitly clears it.
+- Deleting a manager asks for confirmation and promotes their direct reports one level; invalid stored data remains untouched until the user explicitly clears it or restores a valid JSON backup.
 - Added domain and storage tests for forests, cycles, missing managers, duplicate emails, manager candidate filtering, persistence round-trips and invalid versions/data.
-- JSON backup/restore and CSV import remain follow-up work.
+- CSV import remains follow-up work; versioned JSON backup/restore is implemented in the next milestone below.
 - **Verification:** `npm run lint`, `npm run typecheck`, `npm test` (16 passing), `npm run build`, `npm audit` (0 vulnerabilities) and `git diff --check` pass. Browser smoke checks covered sample loading, create/edit and manager assignment, persistence after reload, search/path expansion, directory search/filtering, invalid-storage recovery, and mobile layout; no console errors were reported.
+
+## 2026-11-23 — Versioned JSON backup and restore
+
+- Added a strict `teammap-backup` JSON format with schema version, export timestamp and complete employee records.
+- Added JSON export and restore actions to the People view. Restore previews people/active/department counts and requires confirmation before replacing local data.
+- Zod validates the envelope and employees; full-collection validation rejects unsupported versions, duplicate data, missing managers and reporting cycles as an all-or-nothing import.
+- A valid explicit restore can recover from invalid local data; malformed/invalid files leave the existing data untouched.
+- **Verification:** `npm ci`, lint, typecheck, `npm test` (20 passing), production build, `npm audit` (0 vulnerabilities) and `git diff --check` pass. Browser checks covered export, valid restore/replacement, rejection of a backup with a missing manager without changing existing records, and restore from a corrupt local-storage state.
