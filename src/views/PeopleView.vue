@@ -28,7 +28,7 @@ const {
 } = useEmployees()
 const { mobile } = useDisplay()
 
-const search = ref('')
+const search = ref<string | null>('')
 const departmentFilter = ref<string | null>(null)
 const positionFilter = ref<string | null>(null)
 const statusFilter = ref<Employee['status'] | null>(null)
@@ -63,8 +63,8 @@ const employeeById = computed(
   () => new Map(employees.value.map((employee) => [employee.id, employee])),
 )
 
-function normalize(value: string) {
-  return value
+function normalize(value: string | null | undefined) {
+  return (value ?? '')
     .normalize('NFD')
     .replace(/\p{Diacritic}/gu, '')
     .toLocaleLowerCase()

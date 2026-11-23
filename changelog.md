@@ -82,3 +82,9 @@ Project evolution notes, including the scope of each milestone and its verificat
 - Fixed the invalid-storage recovery alert regression caused by Vuetify 4's grid-based alert layout: `.app-main` is now a flex column and the alert no longer shrinks into a narrow vertical strip.
 - Updated README and project memory to reflect Vuetify 4 and record the compatibility constraints.
 - **Verification:** `npm run lint`, `npm run typecheck`, `npm test` (30 passing), `npm run build`, `npm audit` (0 vulnerabilities) and `git diff --check` pass. Browser checks covered desktop rail/header layout, People table/filters, import dialog, confirmations, snackbars, invalid-storage recovery, Organization chart and 390px mobile layout; no console errors or horizontal overflow were found.
+
+## 2026-11-23 — Clearable search fix
+
+- Fixed the Organization and People clearable search inputs not clearing after upgrading to Vuetify 4. The clear icon sets the model to `null`, which made `normalize()` throw and left the visible text and active filter unchanged.
+- Search state is now typed as `string | null`, and normalization coerces `null`/`undefined` to an empty string so the input, match count and directory rows reset together.
+- **Verification:** `npm run lint`, `npm run typecheck`, `npm test` (30 passing), `npm run build`, `npm audit` (0 vulnerabilities) and `git diff --check` pass. Browser checks typed text into both search fields, clicked each clear icon, confirmed empty inputs/reset filters and found no console errors.

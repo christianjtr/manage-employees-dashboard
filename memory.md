@@ -68,7 +68,7 @@ Durable product and architecture decisions for future development. The changelog
 
 - **Decision:** Run Vuetify 4 with explicit light theme, v3 display thresholds, uppercase button defaults and a column-oriented `v-main` layout.
 - **Reason:** Vuetify 4 changes the default theme to system, reduces breakpoints, removes uppercase buttons, converts alerts to grid layout, and changes typography/reset/CSS layering. The existing UI depends on the v3 visual baseline.
-- **Implication:** Keep `theme.defaultTheme: 'light'`, `display.thresholds` (md 960, lg 1280, xl 1920, xxl 2560) and `defaults.VBtn.class: 'text-uppercase'` in `src/plugins/vuetify.ts`. Keep `.app-main` as a flex column so the storage-recovery alert stacks above views instead of shrinking into a narrow grid item. Re-check dialogs, snackbars, tables and mobile overflow after future Vuetify upgrades.
+- **Implication:** Keep `theme.defaultTheme: 'light'`, `display.thresholds` (md 960, lg 1280, xl 1920, xxl 2560) and `defaults.VBtn.class: 'text-uppercase'` in `src/plugins/vuetify.ts`. Keep `.app-main` as a flex column so the storage-recovery alert stacks above views instead of shrinking into a narrow grid item. Vuetify 4 clearable text fields emit `null`, so keep search normalization null-safe (`value ?? ''`) and model types `string | null`. Re-check dialogs, snackbars, tables and mobile overflow after future Vuetify upgrades.
 
 ## Deferred scope
 
